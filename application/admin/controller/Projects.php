@@ -4,6 +4,8 @@ namespace app\admin\controller;
 
 use think\Controller;
 use think\Request;
+use app\admin\model\Projects as ProjectsModel;
+
 
 class Projects extends Controller
 {
@@ -24,15 +26,15 @@ class Projects extends Controller
             if($name){
                 $where['name']=array("like","%".$name."%");
             }
-            $testService=$this->testService;
-            $data=$testService->getList($where,$page,$limit);
-            return json($data);
-        }
-        $assign = [];
-        $assign['hisiTabData'] = $this->tabData;
-        $assign['hisiTabType'] = 3;
 
-        return $this->assign($assign)->fetch();
+            $data=ProjectsModel::where($where)->paginate($limit)->toArray();
+            return $data;
+        }
+//        $assign = [];
+//        $assign['hisiTabData'] = $this->tabData;
+//        $assign['hisiTabType'] = 3;
+
+        return $this->fetch();
     }
 
     /**
