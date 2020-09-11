@@ -27,9 +27,6 @@ class Projects extends Controller
 
         $data = ProjectsModel::where($where)->paginate($limit);
         $this->assign('data', $data);
-//        $assign = [];
-//        $assign['hisiTabData'] = $this->tabData;
-//        $assign['hisiTabType'] = 3;
         return $this->fetch();
     }
 
