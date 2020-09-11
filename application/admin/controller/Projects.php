@@ -17,23 +17,19 @@ class Projects extends Controller
     public function index()
     {
         //获取项目数据
-        if($this->request->isAjax()){
-            $where      = [];
-            $page       = $this->request->param('page', 1);
-            $limit      = $this->request->param('limit', 15);
-            //用户id
-            $name       = $this->request->param("name");
-            if($name){
-                $where['name']=array("like","%".$name."%");
-            }
-
-            $data=ProjectsModel::where($where)->paginate($limit)->toArray();
-            return $data;
+        $where = [];
+        $limit = $this->request->param('limit', 15);
+        //用户id
+        $name = $this->request->param("name");
+        if ($name) {
+            $where['name'] = array("like", "%" . $name . "%");
         }
+
+        $data = ProjectsModel::where($where)->paginate($limit);
+        $this->assign('data', $data);
 //        $assign = [];
 //        $assign['hisiTabData'] = $this->tabData;
 //        $assign['hisiTabType'] = 3;
-
         return $this->fetch();
     }
 
@@ -50,7 +46,8 @@ class Projects extends Controller
     /**
      * 保存新建的资源
      *
-     * @param  \think\Request  $request
+     * @param \think\Request $request
+     *
      * @return \think\Response
      */
     public function save(Request $request)
@@ -61,7 +58,8 @@ class Projects extends Controller
     /**
      * 显示指定的资源
      *
-     * @param  int  $id
+     * @param int $id
+     *
      * @return \think\Response
      */
     public function read($id)
@@ -72,7 +70,8 @@ class Projects extends Controller
     /**
      * 显示编辑资源表单页.
      *
-     * @param  int  $id
+     * @param int $id
+     *
      * @return \think\Response
      */
     public function edit($id)
@@ -83,8 +82,9 @@ class Projects extends Controller
     /**
      * 保存更新的资源
      *
-     * @param  \think\Request  $request
-     * @param  int  $id
+     * @param \think\Request $request
+     * @param int            $id
+     *
      * @return \think\Response
      */
     public function update(Request $request, $id)
@@ -95,7 +95,8 @@ class Projects extends Controller
     /**
      * 删除指定资源
      *
-     * @param  int  $id
+     * @param int $id
+     *
      * @return \think\Response
      */
     public function delete($id)

@@ -33,11 +33,11 @@ return [
     // 标签库标签结束标记
     'taglib_end'   => '}',
     'tpl_replace_string'  =>  [
-        '__HUI__'=>'/static/lib/hui/static/h-ui',
-        '__HUI_CSS__'=>'/static/lib/hui/static/h-ui/css',
-        '__HUI_ADMIN__'=>"/static/lib/hui/static/h-ui.admin",
-        '__HUI_LIB__' => '/static/lib/hui/lib',
         '__ECHARTS__' => '/static/lib/echarts',
+        '__X_ADMIN__'=>'/static/lib/x-admin',
+        '__X_ADMIN_CSS__'=>'/static/lib/x-admin/css',
+        '__X_ADMIN_JS__'=>"/static/lib/x-admin/js",
+        '__X_ADMIN_LIB__'=>"/static/lib/x-admin/lib",
         '__STATIC__'=>'/static',
         '__JS__'=>'/static/js',
         '__CSS__'=>'/static/css'
