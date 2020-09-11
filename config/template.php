@@ -37,6 +37,7 @@ return [
         '__HUI_CSS__'=>'/static/lib/hui/static/h-ui/css',
         '__HUI_ADMIN__'=>"/static/lib/hui/static/h-ui.admin",
         '__HUI_LIB__' => '/static/lib/hui/lib',
+        '__ECHARTS__' => '/static/lib/echarts',
         '__STATIC__'=>'/static',
         '__JS__'=>'/static/js',
         '__CSS__'=>'/static/css'

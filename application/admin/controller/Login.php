@@ -2,6 +2,8 @@
 
 namespace app\admin\controller;
 
+use app\common\facade\Response;
+use app\admin\model\Users;
 use think\Controller;
 use think\Request;
 
@@ -13,8 +15,9 @@ use think\Request;
  * author <马良 1826888766@qq.com>
  * time 2020/9/10 17:11
  */
-class Login extends Controller
+class Login extends BaseController
 {
+
     /**
      * 登录页
      *
@@ -22,7 +25,91 @@ class Login extends Controller
      */
     public function index()
     {
-        return  $this->fetch();
+        if ($this->request->isPost()) {
+            $param = $this->request->param();
+            try {
+                $this->validate($param, [
+                    'user_name|请输入账号' => 'require',
+                    'password|请输入密码' => 'require'
+                ]);
+            } catch (\Exception $exception) {
+                return Response::fail($exception->getMessage());
+            }
+            $user = Users::login($param['user_name'], $param['password']);
+            if (is_numeric($user)) {
+                return Response::fail($user);
+            }
+            session('user', $user, 86400 * 7);
+            return Response::success($user);
+        }
+        return $this->fetch();
+    }
+
+    public function test()
+    {
+        dump(Users::create([
+            'name' => 'admin',
+            'nick_name' => '超级管理员',
+            'password' => createPassword('123456'),
+            'email' => '',
+            'status' => 1,
+        ]));
+        dump(Users::create([
+            'name' => 'admin',
+            'nick_name' => '超级管理员',
+            'password' => createPassword('123456'),
+            'email' => '',
+            'status' => 1,
+        ]));
+        dump(Users::create([
+            'name' => 'admin',
+            'nick_name' => '超级管理员',
+            'password' => createPassword('123456'),
+            'email' => '',
+            'status' => 1,
+        ]));
+        dump(Users::create([
+            'name' => 'admin',
+            'nick_name' => '超级管理员',
+            'password' => createPassword('123456'),
+            'email' => '',
+            'status' => 1,
+        ]));
+        dump(Users::create([
+            'name' => 'admin',
+            'nick_name' => '超级管理员',
+            'password' => createPassword('123456'),
+            'email' => '',
+            'status' => 1,
+        ]));
+        dump(Users::create([
+            'name' => 'admin',
+            'nick_name' => '超级管理员',
+            'password' => createPassword('123456'),
+            'email' => '',
+            'status' => 1,
+        ]));
+        dump(Users::create([
+            'name' => 'admin',
+            'nick_name' => '超级管理员',
+            'password' => createPassword('123456'),
+            'email' => '',
+            'status' => 1,
+        ]));
+        dump(Users::create([
+            'name' => 'admin',
+            'nick_name' => '超级管理员',
+            'password' => createPassword('123456'),
+            'email' => '',
+            'status' => 1,
+        ]));
+        dump(Users::create([
+            'name' => 'admin',
+            'nick_name' => '超级管理员',
+            'password' => createPassword('123456'),
+            'email' => '',
+            'status' => 1,
+        ]));
     }
 
 }
