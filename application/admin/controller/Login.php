@@ -39,7 +39,7 @@ class Login extends Controller
                 'name'=>$param['user_name'],
                 'status'=>1,
             ];
-            $user = Users::where($where)->find();
+            $user = Users::where($where)->paginate(10)->toArray();
             if (!$user) {
                 return Response::fail($user);
             }
@@ -53,9 +53,15 @@ class Login extends Controller
         return $this->fetch();
     }
 
+    /**
+     * 退出登录
+     * author <马良 1826888766@qq.com>
+     * time 2020/9/11 15:50
+     */
     public function logout()
     {
         Cookie::clear();
+        $this->redirect(url('index'));
     }
 
 }
