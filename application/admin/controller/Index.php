@@ -1,7 +1,6 @@
 <?php
 
 namespace app\admin\controller;
-
 /**
  * 后台入口
  * Class Index
