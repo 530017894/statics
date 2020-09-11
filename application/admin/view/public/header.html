@@ -6,26 +6,23 @@
     </div>
     <ul class="layui-nav left fast-add" lay-filter="">
         <li class="layui-nav-item">
-            <a href="javascript:;">+新增</a>
+            <a href="javascript:;">当前项目</a>
             <dl class="layui-nav-child">
                 <!-- 二级菜单 -->
                 <dd>
                     <a onclick="xadmin.open('最大化','http://www.baidu.com','','',true)">
-                        <i class="iconfont">&#xe6a2;</i>弹出最大化</a></dd>
-                <dd>
-                    <a onclick="xadmin.open('弹出自动宽高','http://www.baidu.com')">
-                        <i class="iconfont">&#xe6a8;</i>弹出自动宽高</a></dd>
-                <dd>
-                    <a onclick="xadmin.open('弹出指定宽高','http://www.baidu.com',500,300)">
-                        <i class="iconfont">&#xe6a8;</i>弹出指定宽高</a></dd>
-                <dd>
-                    <a onclick="xadmin.add_tab('在tab打开','member-list.html')">
-                        <i class="iconfont">&#xe6b8;</i>在tab打开</a></dd>
-                <dd>
-                    <a onclick="xadmin.add_tab('在tab打开刷新','member-del.html',true)">
-                        <i class="iconfont">&#xe6b8;</i>在tab打开刷新</a></dd>
+                        <i class="iconfont">&#xe6a2;</i>选择项目</a></dd>
             </dl>
         </li>
+    </ul>
+    <ul class="layui-nav left" lay-filter="" style="margin-left: 200px">
+        <li class="layui-nav-item to-index">
+            <a href="javascript:;" onclick=xadmin.add_tab('全部项目','{:url("projects/index")}')>
+                <i class="iconfont left-nav-li" lay-tips="全部项目"></i>
+                <cite>全部项目</cite>
+            </a></li>
+        <li class="layui-nav-item to-index">
+            <a href="javascript:;">授权管理</a></li>
     </ul>
     <ul class="layui-nav right" lay-filter="">
         <li class="layui-nav-item">
