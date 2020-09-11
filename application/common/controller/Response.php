@@ -13,17 +13,6 @@ namespace app\common\controller;
  */
 class Response
 {
-    // TODO 是否考虑使用状态码常量
-    //     登录错误信息
-    const PASSWORD_FAIL = 400001;
-    const USER_FAIL = 400002;
-
-
-    // TODO 状态码对应错误信息
-    static $msg = [
-        400001 => '密码错误',
-        400002 => '账号错误',
-    ];
 
     /**
      * /**
@@ -38,13 +27,13 @@ class Response
      * author <马良 1826888766@qq.com>
      * time 2020/9/10 17:02
      */
-    public function success($data = [], $msg = "请求成功", $code = 0, ...$vars)
+    public function success($data = [], $msg = "请求成功")
     {
-        return json(array_merge_recursive([
-            "code" => $code,
+        return json([
+            "code" => 200,
             "msg" => $msg,
             "data" => $data,
-        ], $vars));
+        ]);
     }
 
     /**
@@ -58,12 +47,12 @@ class Response
      * author <马良 1826888766@qq.com>
      * time 2020/9/10 17:02
      */
-    public function fail($code, $msg = "", ...$vars)
+    public function fail($code, $msg = "")
     {
-        return json(array_merge_recursive([
+        return json([
             "code" => $code,
-            "msg" => $msg?$msg:self::$msg[$code],
-        ], $vars));
+            "msg" => $msg,
+        ]);
     }
 
 }

@@ -12,11 +12,6 @@ class BaseModel extends Model
     protected $createTime = "ctime";
     protected $updateTime = "mtime";
 
-    public function __construct($data = [])
-    {
-        parent::__construct($data);
-        echo 1;
-    }
 
     /**
      * @param $moduleId 模块Id
