@@ -14,6 +14,7 @@ use app\common\controller\Response;
  */
 class Users extends BaseModel
 {
+
     /**
      * 登录判断
      * @param string $name 登录用户名
@@ -30,10 +31,10 @@ class Users extends BaseModel
     {
         $user = self::where('name', 'like', $name)->where('status',1)->find();
         if (!$user) {
-            return Response::USER_FAIL;
+            return false;
         }
         if (!verifyPasswrod($password, $user->password)) {
-            return Response::PASSWORD_FAIL;
+            return false;
         }
         return $user;
     }

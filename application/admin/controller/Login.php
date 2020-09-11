@@ -34,10 +34,11 @@ class Login extends BaseController
                 return Response::fail($exception->getMessage());
             }
             $user = Users::login($param['user_name'], $param['password']);
-            if (is_numeric($user)) {
+            if (!$user) {
                 return Response::fail($user);
             }
-            session('user', $user, 86400 * 7);
+            $user->hidden(['password']);
+            cookie('user',json_encode($user),86400*7);
             return Response::success($user);
         }
         return $this->fetch();
@@ -45,69 +46,7 @@ class Login extends BaseController
 
     public function test()
     {
-        dump(Users::create([
-            'name' => 'admin',
-            'nick_name' => '超级管理员',
-            'password' => createPassword('123456'),
-            'email' => '',
-            'status' => 1,
-        ]));
-        dump(Users::create([
-            'name' => 'admin',
-            'nick_name' => '超级管理员',
-            'password' => createPassword('123456'),
-            'email' => '',
-            'status' => 1,
-        ]));
-        dump(Users::create([
-            'name' => 'admin',
-            'nick_name' => '超级管理员',
-            'password' => createPassword('123456'),
-            'email' => '',
-            'status' => 1,
-        ]));
-        dump(Users::create([
-            'name' => 'admin',
-            'nick_name' => '超级管理员',
-            'password' => createPassword('123456'),
-            'email' => '',
-            'status' => 1,
-        ]));
-        dump(Users::create([
-            'name' => 'admin',
-            'nick_name' => '超级管理员',
-            'password' => createPassword('123456'),
-            'email' => '',
-            'status' => 1,
-        ]));
-        dump(Users::create([
-            'name' => 'admin',
-            'nick_name' => '超级管理员',
-            'password' => createPassword('123456'),
-            'email' => '',
-            'status' => 1,
-        ]));
-        dump(Users::create([
-            'name' => 'admin',
-            'nick_name' => '超级管理员',
-            'password' => createPassword('123456'),
-            'email' => '',
-            'status' => 1,
-        ]));
-        dump(Users::create([
-            'name' => 'admin',
-            'nick_name' => '超级管理员',
-            'password' => createPassword('123456'),
-            'email' => '',
-            'status' => 1,
-        ]));
-        dump(Users::create([
-            'name' => 'admin',
-            'nick_name' => '超级管理员',
-            'password' => createPassword('123456'),
-            'email' => '',
-            'status' => 1,
-        ]));
+
     }
 
 }

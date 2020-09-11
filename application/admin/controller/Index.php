@@ -1,9 +1,6 @@
 <?php
 
 namespace app\admin\controller;
-
-use think\Controller;
-
 /**
  * 后台入口
  * Class Index
@@ -12,7 +9,7 @@ use think\Controller;
  * author <马良 1826888766@qq.com>
  * time 2020/9/10 17:12
  */
-class Index extends Controller
+class Index extends BaseController
 {
     /**
      * 后台首页
