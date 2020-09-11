@@ -4,8 +4,6 @@ namespace app\admin\controller;
 
 use app\common\facade\Response;
 use app\admin\model\Users;
-use think\Controller;
-use think\Request;
 
 /**
  * 登录控制器

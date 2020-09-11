@@ -2,9 +2,6 @@
 
 namespace app\admin\controller;
 
-use think\Controller;
-use think\Request;
-
 /**
  * 后台入口
  * Class Index
