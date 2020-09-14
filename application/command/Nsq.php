@@ -19,7 +19,7 @@ class Nsq extends \OkStuff\PhpNsq\Cmd\Subscribe
             ->subscribe($this, function (Message $message) use ($phpnsq, $output) {
                 $phpnsq->getLogger()->info("READ", $message->toArray());
                 // todo 插入到es
-                Es::create($message->toArray());
+                Es::instance()->create($message->toArray());
             });
         //excuted every five seconds.
         $this->addPeriodicTimer(5, function () use ($output) {

@@ -12,4 +12,5 @@ return [
         "auth_secret" => "secret",
         "auth_switch" => false,
     ],
+    'topic' => "test"
 ];

@@ -39,7 +39,8 @@ class Projects extends Controller
      */
     public function create()
     {
-        //
+        
+        return $this->fetch();
     }
 
     /**

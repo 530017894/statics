@@ -5,6 +5,7 @@ namespace app\admin\service;
 
 
 use Elasticsearch\ClientBuilder;
+use think\facade\Log;
 
 class Es
 {
@@ -22,7 +23,9 @@ class Es
         $params['index'] = 'test';
         $params['type'] = 'cat';
         $params['body'] = array('name' => '小川编程');
-        self::$client->index($params);
+        Log::write($params);
+        // TODO 实现索引的管理
+//        self::$client->index($params);
     }
 
     public static function instance()

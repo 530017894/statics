@@ -2,6 +2,7 @@
 
 namespace app\api\controller;
 
+use app\common\Publish;
 use think\Controller;
 use think\Request;
 
@@ -15,5 +16,8 @@ use think\Request;
  */
 class Index extends Controller
 {
-
+    public function index()
+    {
+        return (new Publish())->put('test');
+    }
 }
