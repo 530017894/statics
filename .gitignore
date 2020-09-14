@@ -1,6 +1,5 @@
 /.idea
 /.vscode
-config/database.php
 /vendor
 *.log
 thinkphp

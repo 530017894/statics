@@ -2,10 +2,11 @@
 
 namespace app\admin\controller;
 
+use app\common\facade\Response;
 use think\Controller;
 use think\Request;
 use app\admin\model\Projects as ProjectsModel;
-
+use Elasticsearch\ClientBuilder;
 
 class Projects extends Controller
 {
@@ -17,16 +18,17 @@ class Projects extends Controller
     public function index()
     {
         //获取项目数据
-        $where = [];
-        $limit = $this->request->param('limit', 15);
-        //用户id
-        $name = $this->request->param("name");
-        if ($name) {
-            $where['name'] = array("like", "%" . $name . "%");
+        if ($this->request->isAjax()) {
+            $where = [];
+            $limit = $this->request->param('limit', 10);
+            //用户id
+            $name = $this->request->param("name");
+            if ($name) {
+                $where['name'] = array("like", "%" . $name . "%");
+            }
+            $data = ProjectsModel::where($where)->paginate($limit)->toArray();
+            return Response::success($data);
         }
-
-        $data = ProjectsModel::where($where)->paginate($limit);
-        $this->assign('data', $data);
         return $this->fetch();
     }
 

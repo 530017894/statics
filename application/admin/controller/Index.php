@@ -1,6 +1,9 @@
 <?php
 
 namespace app\admin\controller;
+
+use Elasticsearch\ClientBuilder;
+
 /**
  * 后台入口
  * Class Index
@@ -13,6 +16,7 @@ class Index extends BaseController
 {
     /**
      * 后台首页
+     *
      * @return mixed
      * author <马良 1826888766@qq.com>
      * time 2020/9/10 17:14
@@ -20,17 +24,29 @@ class Index extends BaseController
     public function index()
     {
 
-        return  $this->fetch();
+        return $this->fetch();
     }
 
-    /**
-     * 欢迎页
-     * @return mixed
-     * author <马良 1826888766@qq.com>
-     * time 2020/9/10 17:13
-     */
-    public function welcome()
+    public function test()
     {
-        return $this->fetch();
+        echo microtime_float();
+        echo "<br>";
+
+        $client = ClientBuilder::create()->setHosts(config('es.'))->build();
+        $params = [
+            'index' => 'my_index',
+            'type' => 'my_type',
+            'body' => [
+                'query' => [
+                    'match' => [
+                        'testField' => 'abc'
+                    ]
+                ]
+            ]
+        ];
+        $response = $client->search($params);
+        echo microtime_float();
+
+        halt($response);
     }
 }

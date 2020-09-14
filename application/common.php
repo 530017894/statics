@@ -37,3 +37,9 @@ function verifyPasswrod($string, $password)
 {
     return password_verify($string, $password);
 }
+
+function microtime_float()
+{
+    list($usec, $sec) = explode(" ", microtime());
+    return ((float)$usec + (float)$sec);
+}

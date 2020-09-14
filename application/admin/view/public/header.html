@@ -1,28 +1,16 @@
-<div class="container">
+<div class="container" style="display: flex">
     <div class="logo">
         <a href="./index.html">X-admin v2.2</a></div>
     <div class="left_open">
         <a><i title="展开左侧栏" class="iconfont">&#xe699;</i></a>
     </div>
-    <ul class="layui-nav left fast-add" lay-filter="">
-        <li class="layui-nav-item">
-            <a href="javascript:;">当前项目</a>
-            <dl class="layui-nav-child">
-                <!-- 二级菜单 -->
-                <dd>
-                    <a onclick="xadmin.open('最大化','http://www.baidu.com','','',true)">
-                        <i class="iconfont">&#xe6a2;</i>选择项目</a></dd>
-            </dl>
-        </li>
-    </ul>
-    <ul class="layui-nav left" lay-filter="" style="margin-left: 200px">
+    <ul class="layui-nav left" lay-filter="" style="display: flex;flex: 1;justify-content: center">
         <li class="layui-nav-item to-index">
-            <a href="javascript:;" onclick=xadmin.add_tab('全部项目','{:url("projects/index")}')>
-                <i class="iconfont left-nav-li" lay-tips="全部项目"></i>
+            <a href='{:url("projects/index")}'>
                 <cite>全部项目</cite>
             </a></li>
         <li class="layui-nav-item to-index">
-            <a href="javascript:;">授权管理</a></li>
+            <a href='{:url("projects/index")}' ><cite>授权管理</cite></a></li>
     </ul>
     <ul class="layui-nav right" lay-filter="">
         <li class="layui-nav-item">

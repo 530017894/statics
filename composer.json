@@ -21,7 +21,9 @@
         "topthink/think-captcha": "2.0.*",
         "topthink/think-worker": "2.0.*",
         "topthink/think-helper": "1.0.*",
-      "ext-json": "*"
+      "ext-json": "*",
+        "elasticsearch/elasticsearch": "^7.9",
+        "okstuff/phpnsq": "^3.1"
     },
     "autoload": {
         "psr-4": {
