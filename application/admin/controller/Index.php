@@ -2,7 +2,9 @@
 
 namespace app\admin\controller;
 
+use app\admin\service\Es;
 use Elasticsearch\ClientBuilder;
+use OkStuff\PhpNsq\PhpNsq;
 
 /**
  * 后台入口
@@ -29,24 +31,6 @@ class Index extends BaseController
 
     public function test()
     {
-        echo microtime_float();
-        echo "<br>";
-
-        $client = ClientBuilder::create()->setHosts(config('es.'))->build();
-        $params = [
-            'index' => 'my_index',
-            'type' => 'my_type',
-            'body' => [
-                'query' => [
-                    'match' => [
-                        'testField' => 'abc'
-                    ]
-                ]
-            ]
-        ];
-        $response = $client->search($params);
-        echo microtime_float();
-
-        halt($response);
+        Es::instance()->create();
     }
 }
