@@ -17,6 +17,10 @@ use think\facade\Cookie;
  */
 class Login extends Controller
 {
+    /**
+     * @var bool 验证失败抛出异常
+     */
+    protected $failException = true;
 
     /**
      * 登录页
@@ -29,25 +33,26 @@ class Login extends Controller
             $param = $this->request->param();
             try {
                 $this->validate($param, [
-                    'user_name|请输入账号' => 'require',
-                    'password|请输入密码' => 'require'
+                    'user_name|账号' => 'require',
+                    'password|密码' => 'require|min:6'
                 ]);
+
             } catch (\Exception $exception) {
-                return Response::fail(-1,$exception->getMessage());
+                return Response::fail(-1, $exception->getMessage());
             }
             $where = [
-                'name'=>$param['user_name'],
-                'status'=>1,
+                'name' => $param['user_name'],
+                'status' => 1,
             ];
             $user = Users::where($where)->find();
             if (!$user) {
-                return Response::fail(-1,'账户错误');
+                return Response::fail(-1, '账户错误');
             }
-            if(!verifyPasswrod($param['password'], $user->password)){
-                return Response::fail(-1,'密码错误');
+            if (!verifyPasswrod($param['password'], $user->password)) {
+                return Response::fail(-1, '密码错误');
             }
             $user->hidden(['password']);
-            cookie('user',json_encode($user),86400*7);
+            cookie('user', json_encode($user), 86400 * 7);
 
             return Response::success($user);
         }

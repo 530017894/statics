@@ -2,15 +2,15 @@
 return [
     "nsq" => [
         "nsqd_addrs" => [
-            "192.168.1.128:4150",
+            "39.101.181.211:50",
         ],
         "lookupd_addrs" => [
-            "192.168.1.128:4161",
+            "39.101.181.211:4161",
         ],
-        "lookupd_switch" => true,
+        "lookupd_switch" => false,
         "logdir" => "/tmp",
         "auth_secret" => "secret",
         "auth_switch" => false,
     ],
-    'topic' => "test"
+    'topic' => "cy_message_log"
 ];

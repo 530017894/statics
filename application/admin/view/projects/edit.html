@@ -1,0 +1,138 @@
+{extend name="public:page" /}
+{block name="meta"}
+<!--头信息-->
+{/block}
+{block name="content"}
+<!--内容-->
+<div class="padding">
+    <div class="page-title">
+        修改项目
+    </div>
+    <form class="layui-form" action="">
+        <input type="hidden" name="id" value="{$project.id}">
+        <div class="layui-form-item">
+            <label class="layui-form-label"><span class="x-red">*</span>项目名称</label>
+            <div class="layui-input-block">
+                <input type="text" name="name" required lay-verify="required" placeholder="请输入项目名称"
+                       value="{$project.name}"
+                       autocomplete="off"
+                       class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label"><span class="x-red">*</span>项目平台</label>
+            <div class="layui-input-block">
+                <div class="">
+                    <div id="agent-list" class="agent-list">
+                        <div class="agent-item ">
+                            <i class="icon_font icon-pc"></i>
+                        </div>
+                        <div class="agent-item ">
+                            <i class="icon_font icon-shouji"></i>
+                        </div>
+                        <div class="agent-item ">
+                            <i class="icon_font icon-ios"></i>
+                        </div>
+                        <div class="agent-item ">
+                            <i class="icon_font icon-android"></i>
+                        </div>
+                        <div class="agent-item ">
+                            <i class="icon_font icon-xiaochengxu"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="input-list">
+                    <input type="hidden" name="platform.1" value="0" title="电脑网页">
+                    <input type="hidden" name="platform.2" value="0" title="手机网页">
+                    <input type="hidden" name="platform.3" value="0" title="苹果">
+                    <input type="hidden" name="platform.4" value="0" title="安卓">
+                    <input type="hidden" name="platform.5" value="0" title="小程序">
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label"><span class="x-red">*</span>项目域名</label>
+            <div class="layui-input-block">
+                <input type="text" name="domain" required lay-verify="required|confirm"
+                       value="{$project.domain}"
+                       placeholder="请输入项目域名"
+                       autocomplete="off"
+                       class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label"><span class="x-red">*</span>是否统计</label>
+            <div class="layui-input-block">
+                <input type="radio" name="is_static" value="1" title="是" {$project.is_static?'checked':''}>
+                <input type="radio" name="is_static" value="0" title="否" {$project.is_static?'':'checked'}>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label"></label>
+            <div class="layui-input-block">
+                <button type="submit" lay-filter="create" lay-submit="" class="layui-btn layui-btn-normal">保存</button>
+                <button type="reset" onclick="xadmin.close()" class="layui-btn layui-btn-warm">取消</button>
+            </div>
+        </div>
+    </form>
+
+</div>
+
+{/block}
+{block name="footer"}
+<!--脚本-->
+<script>
+    //Demo
+    layui.use(['form', 'jquery'], function () {
+        var form = layui.form;
+        var $ = layui.$;
+        $("#agent-list").on("click", ".agent-item", function () {
+            var index = $(this).index();
+            let inputList = $(".input-list");
+            var checked = inputList.children().eq(index).val()
+            if (Number(checked)) {
+                $(this).removeClass('active')
+                inputList.children().eq(index).val('0')
+            } else {
+                $(this).addClass('active')
+                inputList.children().eq(index).val('1')
+            }
+        })
+
+        var platform = JSON.parse('{:json_encode($project.platform)}');
+        platform.forEach((item)=>{
+           $("#agent-list .agent-item").eq(item - 1).addClass('active')
+           $(".input-list input").eq(item - 1).val('1')
+        })
+        $(".captcha").click(function () {
+            var time = Date.now() / 1000
+            $(this).attr('src', '{:captcha_src()}?time' + time)
+        })
+
+        //监听提交
+        form.on('submit(create)', function (data) {
+            var field = $("form").toJSON();
+            var platform = [];
+            for (var key in field.platform) {
+                if (field.platform.hasOwnProperty(key)) {
+                    if (field.platform[key] == 1) {
+                        platform.push(key)
+                    }
+                }
+            }
+            field.platform = platform.join(',');
+            $.post('{:url("update")}',field,function (res) {
+                if (res.code == 200) {
+                    parent.tableIns.reload()
+                    layer.msg('添加成功', function () {
+                        xadmin.close()
+                    });
+                } else {
+                    layer.msg(res.msg);
+                }
+            })
+            return false;
+        });
+    });
+</script>
+{/block}

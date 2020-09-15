@@ -2,10 +2,131 @@
 <title>后台登录-X-admin2.2</title>
 <meta name="renderer" content="webkit|ie-comp|ie-stand">
 <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-<meta name="viewport" content="width=device-width,user-scalable=yes, minimum-scale=0.4, initial-scale=0.8,target-densitydpi=low-dpi" />
-<meta http-equiv="Cache-Control" content="no-siteapp" />
+<meta name="viewport"
+      content="width=device-width,user-scalable=yes, minimum-scale=0.4, initial-scale=0.8,target-densitydpi=low-dpi"/>
+<meta http-equiv="Cache-Control" content="no-siteapp"/>
 <link rel="stylesheet" href="__X_ADMIN_CSS__/font.css">
+<link rel="stylesheet" href="__FONT__/icon.css">
 <link rel="stylesheet" href="__X_ADMIN_CSS__/xadmin.css">
+<style>
+    .top-box {
+        height: 50px;
+    }
+    .padding{
+        padding: 15px;
+    }
+
+    .link{
+        color: #1E9FFF;
+        text-decoration: underline;
+    }
+
+    .captcha {
+        width: 100px;
+        height: 38px;
+    }
+
+    .page-title {
+        background: #FFFFFF;
+        padding: 15px;
+        font-size: 18px;
+        margin: 15px 0;
+    }
+
+    .layui-card-header {
+        background: #f2f2f2;
+    }
+
+
+    .layui-card-header {
+        background: #f2f2f2;
+    }
+
+    .page-content {
+        top: 0;
+    }
+
+    .top {
+        position: fixed;
+        top: 45px;
+        width: 100%;
+        padding: 0;
+        height: 50px;
+        background: #FFFFFF;
+        z-index: 999;
+        box-shadow: 0 10px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .left-nav {
+        padding-top: 0;
+    }
+
+    .module-select {
+        border-radius: 50px;
+    }
+
+    .module-select input.layui-unselect {
+        border-radius: 50px;
+        text-align: center;
+    }
+
+    .flex {
+        display: flex;
+        align-items: center;
+        height: 100%
+    }
+
+    .agent-list {
+        display: flex;
+        align-items: center;
+        height: 40px;
+    }
+    .agent-list.sm{
+        height: 30px;
+    }
+    .agent-list .agent-item {
+        width: 40px;
+        height: 40px;
+        margin-right: 10px;
+        float: left;
+        border-radius: 50px;
+        border: 1px solid #dddddd;
+        display: flex;
+        align-items: center;
+        color: #000000;
+        overflow: hidden;
+        justify-content: center;
+    }
+    .agent-list.sm .agent-item{
+        width: 30px;
+        height: 30px;
+    }
+    .agent-item .icon_font {
+        font-size: 25px;
+    }
+    .agent-list.sm  .agent-item .icon_font {
+        font-size: 15px;
+    }
+
+    .agent-item.active {
+        background: #1E9FFF;
+        color: #FFFFFF;
+    }
+
+    .agent-item img {
+        width: 30px;
+        height: 30px;
+    }
+
+    .layui-laydate-range {
+        width: 580px !important;
+    }
+
+    html, body {
+        background: #f8f8f8;
+    }
+</style>
+
 <!-- <link rel="stylesheet" href="./css/theme5.css"> -->
 <script src="__X_ADMIN_LIB__/layui/layui.js" charset="utf-8"></script>
 <script type="text/javascript" src="__X_ADMIN_JS__/xadmin.js"></script>
@@ -14,6 +135,7 @@
 <!--[if lt IE 9]>
 <script src="https://cdn.staticfile.org/html5shiv/r29/html5.min.js"></script>
 <script src="https://cdn.staticfile.org/respond.js/1.4.2/respond.min.js"></script>
+
 <![endif]-->
 <script>
     // 是否开启刷新记忆tab功能

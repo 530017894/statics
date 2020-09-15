@@ -9,52 +9,101 @@
 {/block}
 
 {block name="content"}
+<div class="padding">
+    <div class="page-title">
+        全部项目
+    </div>
+    <div class="layui-card">
+        <div class="layui-card-header flex" style="justify-content: space-between">卡片面板
 
-<div class="layui-fluid">
-    <div class="layui-row layui-col-space15">
-        <div class="layui-col-md12">
-            <div class="layui-card">
-                <div class="layui-card-body ">
-                    <form class="layui-form layui-col-space5">
-                        <div class="layui-inline layui-show-xs-block">
-                            <input class="layui-input" autocomplete="off" placeholder="开始日" name="start" id="start">
-                        </div>
-                        <div class="layui-inline layui-show-xs-block">
-                            <input class="layui-input" autocomplete="off" placeholder="截止日" name="end" id="end">
-                        </div>
-                        <div class="layui-inline layui-show-xs-block">
-                            <input type="text" name="username" placeholder="请输入用户名" autocomplete="off"
-                                   class="layui-input">
-                        </div>
-                        <div class="layui-inline layui-show-xs-block">
-                            <button class="layui-btn" lay-submit="" lay-filter="sreach"><i
-                                    class="layui-icon">&#xe615;</i></button>
-                        </div>
-                    </form>
-                </div>
-                <div class="layui-card-header">
-                    <button class="layui-btn layui-btn-danger" onclick="delAll()"><i class="layui-icon"></i>批量删除
-                    </button>
-                    <button class="layui-btn" onclick="xadmin.open('添加用户','./admin-add.html',600,400)"><i
-                            class="layui-icon"></i>添加
-                    </button>
-                </div>
-                <div class="layui-card-body ">
-                    <table class="layui-table layui-form" id="table">
+            <button class="layui-btn layui-btn-normal layui-btn-sm"
+                    onclick=xadmin.open('添加项目','{:url("create")}',700,600)><i
+                    class="layui-icon"></i>添加项目
+            </button>
+        </div>
+        <div class="layui-card-body">
+            <div class="layui-row layui-col-space15">
+                <div class="layui-col-md12">
+                    <div class="layui-card">
+                        <div class="layui-card-body ">
+                            <form class="layui-form layui-col-space5">
 
-                    </table>
-                </div>
-                <div class="layui-card-body ">
-                    <div id="page"></div>
+                                <div class="layui-inline layui-show-xs-block">
+                                    <input type="text" name="username" placeholder="请搜索应用名称" autocomplete="off"
+                                           class="layui-input">
+                                </div>
+                                <div class="layui-inline layui-show-xs-block">
+                                    <button class="layui-btn layui-btn-sm layui-btn-normal" lay-submit=""
+                                            lay-filter="sreach"><i
+                                            class="layui-icon">&#xe615;</i></button>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="layui-card-body ">
+                            <table class="layui-table layui-form" id="table"></table>
+                        </div>
+                        <div class="layui-card-body ">
+                            <div id="page"></div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
 
+
 {/block}
 
 {block name="footer"}
+<script type="text/html" id="tools">
+    <button class="layui-btn layui-btn-normal layui-btn-sm" onclick="edit({{d.id}})">
+        <i class="layui-icon">&#xe642;</i>编辑
+    </button>
+    <button class="layui-btn layui-btn-danger layui-btn-sm" onclick="del({{d.id}})">
+        <i class="layui-icon ">&#xe640;</i>删除
+    </button>
+</script>
+<script type="text/html" id="table-name">
+    <a class="link" href={:url('index/index')}?id={{d.id}}>{{d.name}}</a>
+</script>
+<script type="text/html" id="table-is_static">
+
+    <input type="checkbox" lay-filter="is_static"
+           {{# if(d.is_static== 1){ }} checked {{# } }}
+           value="{{d.id}}" lay-skin="switch"
+           lay-text="开启|关闭">
+</script>
+<script type="text/html" id="table-platform">
+    <div class="agent-list sm">
+        {{# if(d.platform.indexOf('1') != -1){ }}
+        <div class="agent-item active">
+            <i class="icon_font icon-pc"></i>
+        </div>
+        {{# } }}
+        {{# if(d.platform.indexOf('2') != -1){ }}
+        <div class="agent-item active">
+            <i class="icon_font icon-shouji"></i>
+        </div>
+        {{# } }}
+        {{# if(d.platform.indexOf('3') != -1){ }}
+
+        <div class="agent-item active">
+            <i class="icon_font icon-ios"></i>
+        </div>
+        {{# } }}
+        {{# if(d.platform.indexOf('4') != -1){ }}
+        <div class="agent-item active">
+            <i class="icon_font icon-android"></i>
+        </div>
+        {{# } }}
+        {{# if(d.platform.indexOf('5') != -1){ }}
+        <div class="agent-item active">
+            <i class="icon_font icon-xiaochengxu"></i>
+        </div>
+        {{# } }}
+    </div>
+</script>
 <script>
     layui.use(['laydate', 'jquery', 'form'], function () {
         var laydate = layui.laydate;
@@ -69,18 +118,30 @@
             elem: '#table',
             url: "{:url('')}",
             cols: [[ //表头
-                {field: 'id', title: 'ID', width: 80, sort: true, fixed: 'left'}
-                , {field: 'username', title: '用户名', width: 80}
-                , {field: 'sex', title: '性别', width: 80, sort: true}
-                , {field: 'city', title: '城市', width: 80}
-                , {field: 'sign', title: '签名', width: 177}
-                , {field: 'experience', title: '积分', width: 80, sort: true}
-                , {field: 'score', title: '评分', width: 80, sort: true}
-                , {field: 'classify', title: '职业', width: 80}
-                , {field: 'wealth', title: '财富', width: 135, sort: true}
+                {field: 'name', title: '项目名称', templet: "#table-name"}
+                , {field: 'platform', width: 300, title: '项目平台', templet: "#table-platform"}
+                , {field: 'domain', title: '项目域名',}
+                , {field: 'is_static', title: '是否统计', templet: "#table-is_static"}
+                , {field: 'user_account', title: '累计用户',}
+                , {field: 'ctime', title: '创建时间',}
+                , {field: 'mtime', title: '更新时间',}
+                , {field: 'tools', width: 200, title: '操作', templet: "#tools"}
             ]]
         })
-
+        form.on("switch(is_static)", function (e) {
+            console.log(e.elem.checked)
+            console.log(e.value)
+            $.post("{:url('update')}", {
+                id: e.value,
+                is_static: e.elem.checked ? 1 : 0
+            }, function (res) {
+                if (res.code == 200) {
+                    layer.msg('修改成功')
+                } else {
+                    layer.msg(res.msg)
+                }
+            })
+        })
         //执行一个laydate实例
         laydate.render({
             elem: '#start' //指定元素
@@ -92,37 +153,23 @@
         });
     });
 
-    /*用户-停用*/
-    function member_stop(obj, id) {
-        layer.confirm('确认要停用吗？', function (index) {
-
-            if ($(obj).attr('title') == '启用') {
-
-                //发异步把用户状态进行更改
-                $(obj).attr('title', '停用')
-                $(obj).find('i').html('&#xe62f;');
-
-                $(obj).parents("tr").find(".td-status").find('span').addClass('layui-btn-disabled').html('已停用');
-                layer.msg('已停用!', {icon: 5, time: 1000});
-
-            } else {
-                $(obj).attr('title', '启用')
-                $(obj).find('i').html('&#xe601;');
-
-                $(obj).parents("tr").find(".td-status").find('span').removeClass('layui-btn-disabled').html('已启用');
-                layer.msg('已启用!', {icon: 5, time: 1000});
-            }
-
-        });
+    function edit(id) {
+        xadmin.open('修改项目', "{:url('edit')}?id=" + id, 700, 600)
     }
-
-    /*用户-删除*/
-    function member_del(obj, id) {
-        layer.confirm('确认要删除吗？', function (index) {
-            //发异步删除数据
-            $(obj).parents("tr").remove();
-            layer.msg('已删除!', {icon: 1, time: 1000});
-        });
+    
+    function del(id) {
+        layer.confirm('确认删除当前项目吗？',function (index) {
+            $.post("{:url('delete')}?",{
+                id:id
+            },function (res){
+                if (res.code == 200) {
+                    layer.msg('删除成功')
+                    tableIns.reload()
+                } else {
+                    layer.msg(res.msg)
+                }
+            })
+        })
     }
 
 

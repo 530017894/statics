@@ -2,13 +2,13 @@
 
 namespace app\admin\controller;
 
+use app\admin\model\UserPermission;
 use app\common\facade\Response;
-use think\Controller;
+use think\Db;
 use think\Request;
 use app\admin\model\Projects as ProjectsModel;
-use Elasticsearch\ClientBuilder;
 
-class Projects extends Controller
+class Projects extends BaseController
 {
     /**
      * 显示资源列表
@@ -26,7 +26,8 @@ class Projects extends Controller
             if ($name) {
                 $where['name'] = array("like", "%" . $name . "%");
             }
-            $data = ProjectsModel::where($where)->paginate($limit)->toArray();
+            $where['status'] = 1;
+            $data = ProjectsModel::where($where)->withAttr('platform')->order('ctime desc')->paginate($limit)->toArray();
             return Response::success($data);
         }
         return $this->fetch();
@@ -39,9 +40,9 @@ class Projects extends Controller
      */
     public function create()
     {
-        
         return $this->fetch();
     }
+
 
     /**
      * 保存新建的资源
@@ -50,9 +51,28 @@ class Projects extends Controller
      *
      * @return \think\Response
      */
-    public function save(Request $request)
+    public function save()
     {
-        //
+        $param = $this->request->param();
+        $rule = [];
+        Db::startTrans();
+        try {
+            $this->validate($param, $rule);
+            $projects = ProjectsModel::create($param);
+            if ($projects->id) {
+                UserPermission::add($projects->id, 1, $this->getUser()['id']);
+            }else{
+                throw new \Exception('创建项目失败');
+            }
+            Db::commit();
+            // 全部完成后创建对应表
+            ProjectsModel::createModule($projects);
+        } catch (\Exception $exception) {
+            Db::rollback();
+            return \response($exception);
+            return Response::instance()->fail(-1, $exception->getMessage());
+        }
+        return Response::instance()->success($projects);
     }
 
     /**
@@ -76,7 +96,9 @@ class Projects extends Controller
      */
     public function edit($id)
     {
-        //
+        $project = ProjectsModel::get($id);
+        $this->assign('project', $project);
+        return $this->fetch();
     }
 
     /**
@@ -89,7 +111,16 @@ class Projects extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $projects = ProjectsModel::get($id);
+        if (!$projects) {
+            return Response::instance()->fail(-1, "项目不存在");
+        }
+        $projects->data($request->param());
+        if ($projects->save()) {
+            return Response::instance()->success($projects);
+        }
+        return Response::instance()->fail(-1, "系统错误，保存失败");
+
     }
 
     /**
@@ -101,6 +132,14 @@ class Projects extends Controller
      */
     public function delete($id)
     {
-        //
+        $project = ProjectsModel::get($id);
+        if (!$project) {
+            return Response::instance()->fail(-1, "项目不存在");
+        }
+        $project->status = 0;
+        if ($project->save()) {
+            return Response::instance()->success();
+        }
+        return Response::instance()->fail(-1, "系统错误，删除失败");
     }
 }

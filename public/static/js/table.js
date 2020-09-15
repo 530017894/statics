@@ -1,11 +1,12 @@
-function tableRender(config) {
+var tableIns = null;
+function tableRender(config, callback) {
 //第一个实例
     layui.use('table', function () {
         let table = layui.table
-        table.render({
+        tableIns = table.render({
             height: 600
             , page: true //开启分页
-            ,limits:[10,25,50,100,1000]
+            , limits: [10, 25, 50, 100, 1000]
             , parseData: function (res) { //res 即为原始返回的数据
                 res = res.data
                 return {
@@ -17,5 +18,8 @@ function tableRender(config) {
             },
             ...config
         });
+        if (typeof callback == "function") {
+            callback(tableIns)
+        }
     })
 }

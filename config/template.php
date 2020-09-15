@@ -40,6 +40,7 @@ return [
         '__X_ADMIN_LIB__' => "/static/lib/x-admin/lib",
         '__STATIC__' => '/static',
         '__JS__' => '/static/js',
+        '__FONT__' => '/static/FONT',
         '__CSS__' => '/static/css'
 
     ]

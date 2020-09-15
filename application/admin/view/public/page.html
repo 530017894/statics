@@ -1,2 +1,88 @@
+<!doctype html>
+<html>
+<head>
+    {include file="public/meta" /}
+    <style>
+        .top-box {
+            height: 50px;
+        }
 
+        .page-content {
+            top: 0;
+        }
+
+        .top {
+            position: fixed;
+            top: 45px;
+            width: 100%;
+            padding: 0;
+            height: 50px;
+            background: #FFFFFF;
+            z-index: 999;
+            box-shadow: 0 10px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .left-nav {
+            padding-top: 0;
+        }
+
+        .module-select {
+            border-radius: 50px;
+        }
+
+        .module-select input.layui-unselect {
+            border-radius: 50px;
+            text-align: center;
+        }
+
+        .flex {
+            display: flex;
+            align-items: center;
+            height: 100%
+        }
+
+        .agent-list {
+            display: flex;
+            align-items: center;
+            height: 40px;
+        }
+
+        .agent-list .agent-item {
+            width: 40px;
+            height: 40px;
+            float: left;
+            border-radius: 50px;
+            border: 1px solid #dddddd;
+            display: flex;
+            align-items: center;
+            overflow: hidden;
+            justify-content: center;
+        }
+
+        .agent-item.active {
+            background: #1E9FFF;
+        }
+
+        .agent-item img {
+            width: 30px;
+            height: 30px;
+        }
+        .layui-laydate-range{
+            width: 580px !important;
+        }
+        html,body{
+            background: #f8f8f8;
+        }
+    </style>
+
+    {block name="meta"}
+    {/block}
+</head>
+<body>
 {block name="content"}{/block}
+{include file="public/footer" /}
+
+{block name="footer"}
+{/block}
+</body>
+</html>

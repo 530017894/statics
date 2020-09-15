@@ -2,7 +2,6 @@
 
 namespace app\admin\model;
 
-use app\common\controller\Response;
 
 /**
  * 用户模型
