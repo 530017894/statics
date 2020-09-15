@@ -10,11 +10,11 @@
                 <cite>全部项目</cite>
             </a></li>
         <li class="layui-nav-item to-index">
-            <a href='{:url("projects/index")}' ><cite>授权管理</cite></a></li>
+            <a href='{:url("permission/index")}' ><cite>授权管理</cite></a></li>
     </ul>
     <ul class="layui-nav right" lay-filter="">
         <li class="layui-nav-item">
-            <a href="javascript:;">{$user.nick_name}</a>
+            <a href="javascript:;">{$user.nick_name}【{$permission|decodePermission}】</a>
             <dl class="layui-nav-child">
                 <!-- 二级菜单 -->
                 <dd>

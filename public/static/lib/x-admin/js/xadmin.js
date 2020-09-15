@@ -248,6 +248,7 @@ layui.use(['layer', 'element', 'jquery'], function () {
             $('.page-content').animate({left: '220px'}, 100);
             $('.left-nav i').css('font-size', '14px');
             $('.left-nav cite,.left-nav .nav_right').show();
+            $('.top-box .top').addClass('hide-nav');
         }
 
         if ($(window).width() < 768) {
@@ -293,11 +294,14 @@ layui.use(['layer', 'element', 'jquery'], function () {
             $('.left-nav cite,.left-nav .nav_right').hide();
             $('.page-content').animate({left: '60px'}, 100);
             $('.page-content-bg').hide();
+            $('.top-box .top').addClass('hide-nav');
+
         } else {
             $('.left-nav').animate({width: '220px'}, 100);
             $('.page-content').animate({left: '220px'}, 100);
             $('.left-nav i').css('font-size', '14px');
             $('.left-nav cite,.left-nav .nav_right').show();
+            $('.top-box .top').removeClass('hide-nav');
             if ($(window).width() < 768) {
                 $('.page-content-bg').show();
             }

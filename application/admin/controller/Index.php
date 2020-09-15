@@ -2,9 +2,7 @@
 
 namespace app\admin\controller;
 
-use app\common\Publish;
-use Elasticsearch\ClientBuilder;
-use OkStuff\PhpNsq\PhpNsq;
+
 
 /**
  * 后台入口
@@ -25,13 +23,11 @@ class Index extends BaseController
      */
     public function index()
     {
-
         return $this->fetch();
     }
 
     public function test()
     {
-
 
     }
 }

@@ -16,7 +16,7 @@
  * time 2020/9/11 13:36
  *
  * @param string $string 明文密码
- * @param string $salt 加盐
+ * @param string $salt   加盐
  *
  * @return false|string|null
  */
@@ -42,4 +42,9 @@ function microtime_float()
 {
     list($usec, $sec) = explode(" ", microtime());
     return ((float)$usec + (float)$sec);
+}
+
+function decodePermission($value)
+{
+    return ['', '管理员', '运营'][$value];
 }

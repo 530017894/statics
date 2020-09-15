@@ -1,7 +1,7 @@
 <?php
 
 
-namespace app\common\facade;
+namespace app\admin\facade;
 
 use think\Facade;
 use think\response\Json;
@@ -22,6 +22,6 @@ class Response extends Facade
      */
     protected static function getFacadeClass()
     {
-        return 'app\common\Response';
+        return 'app\admin\common\Response';
     }
 }

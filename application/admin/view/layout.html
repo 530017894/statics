@@ -20,38 +20,49 @@
 <!--<div class="x-slide_left"></div>-->
 <!-- 左侧菜单结束 -->
 <!-- 右侧主体开始 -->
-<div class="page-content" style="position: relative">
+<div class="page-content" style="margin-top: 45px">
     <div class="top-box">
         <div class=" top ">
-            <div class="layui-row layui-form" style="height: 100%;padding: 0 15px">
-                <div class="layui-col-md2 layui-col-sm4 flex module-select">
-                    <select name="city" lay-verify="">
-                        <option value="010">北京</option>
-                        <option value="021">上海</option>
-                        <option value="0571">杭州</option>
+            <div class="flex layui-form" style="height: 100%;padding: 0 15px">
+                <div class=" flex module-select">
+                    <select name="project" lay-filter="project">
+                        {volist name="$projects" id="vo"}
+                        <option value="{$vo.id}">{$vo.name}</option>
+                        {/volist}
                     </select>
                 </div>
-                <div class="layui-col-md2 layui-col-sm4 flex">
+                <div class=" flex">
                     <!--平台-->
-                    <div class="agent-list">
-                        <div class="agent-item active">
+                    <div id="agent_list" class="agent-list">
+                        {if array_search('1',$project.platform) !== false}
+                        <div data-id="1" class="agent-item {$platform_id == '1'?'active':''}">
                             <i class="icon_font icon-pc"></i>
                         </div>
-                        <div class="agent-item layui-hide">
+                        {/if}
+                        {if array_search('2',$project.platform) !== false}
+
+                        <div data-id="2" class="agent-item {$platform_id == '2'?'active':''}">
                             <i class="icon_font icon-shouji"></i>
                         </div>
-                        <div class="agent-item layui-hide">
+                        {/if}
+                        {if array_search('3',$project.platform) !== false}
+                        <div data-id="3" class="agent-item {$platform_id == '3'?'active':''}">
                             <i class="icon_font icon-ios"></i>
                         </div>
-                        <div class="agent-item layui-hide">
+                        {/if}
+                        {if array_search('4',$project.platform) !== false}
+                        <div data-id="4" class="agent-item {$platform_id == '4'?'active':''}">
                             <i class="icon_font icon-android"></i>
                         </div>
-                        <div class="agent-item layui-hide">
+                        {/if}
+                        {if array_search('5',$project.platform) !== false}
+                        <div data-id="5" class="agent-item {$platform_id == 5?'active':''}">
                             <i class="icon_font icon-xiaochengxu"></i>
                         </div>
+                        {/if}
                     </div>
                 </div>
-                <div id="tools-left" class="layui-col-md6 layui-col-sm4 flex" style="justify-content: flex-end">
+                <div id="tools-left" class=" flex" style="justify-content: flex-end;flex: 1">
                     {block name="tools"}
                     {/block}
                 </div>
@@ -69,7 +80,16 @@
     layui.use(['form', 'jquery'], function () {
         form = layui.form;
         $ = layui.$;
-
+        var active_platform = '{$platform_id}';
+        form.on("select(project)", function (e) {
+            location.href = "{:url('index/index',$where)}?project_id=" + e.value
+        })
+        $("#agent_list").on('click', '.agent-item', function () {
+            if (active_platform != $(this).data('id')) {
+                $(this).addClass('active')
+                location.href = "{:url('',$where)}?project_id={$project.id}&platform_id=" + $(this).data('id')
+            }
+        })
     })
 </script>
 

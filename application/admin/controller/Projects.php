@@ -3,7 +3,7 @@
 namespace app\admin\controller;
 
 use app\admin\model\UserPermission;
-use app\common\facade\Response;
+use app\admin\facade\Response;
 use think\Db;
 use think\Request;
 use app\admin\model\Projects as ProjectsModel;

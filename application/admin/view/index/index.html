@@ -9,89 +9,126 @@
         </div>
     </div>
     <div class="layui-input-inline" style="width: 200px;">
-        <input type="text" id="test2" placeholder="请选择时间" class="layui-input">
+        <input type="text" id="ctime" placeholder="请选择时间" class="layui-input">
     </div>
-<!--    <div class="layui-input-inline" style="width: 200px;">-->
-<!--        <label>-->
-<!--            <select name="" id="">-->
-<!--                <option value="">全部系统</option>-->
-<!--                <option value="1">安卓系统</option>-->
-<!--                <option value="1">苹果系统</option>-->
-<!--                <option value="1">windows系统</option>-->
-<!--            </select>-->
-<!--        </label>-->
-<!--    </div>-->
-<!--    <div class="layui-input-inline" style="width: 200px;">-->
-<!--        <label>-->
-<!--            <select lay-search name="" id="">-->
-<!--                <option value="">全部厂商</option>-->
-<!--                <option value="1">华为</option>-->
-<!--                <option value="1">苹果</option>-->
-<!--                <option value="1">小米</option>-->
-<!--                <option value="1">三星</option>-->
-<!--                <option value="1">OPPO</option>-->
-<!--                <option value="1">VIVO</option>-->
-<!--            </select>-->
-<!--        </label>-->
-<!--    </div>-->
-<!--    <div class="layui-input-inline" style="width: 200px;">-->
-<!--        <label>-->
-<!--            <select lay-search name="" id="">-->
-<!--                <option value="">搜索名称</option>-->
-<!--                <option value="1">橙芽</option>-->
-<!--            </select>-->
-<!--        </label>-->
-<!--    </div>-->
+    <!--    <div class="layui-input-inline" style="width: 200px;">-->
+    <!--        <label>-->
+    <!--            <select name="" id="">-->
+    <!--                <option value="">全部系统</option>-->
+    <!--                <option value="1">安卓系统</option>-->
+    <!--                <option value="1">苹果系统</option>-->
+    <!--                <option value="1">windows系统</option>-->
+    <!--            </select>-->
+    <!--        </label>-->
+    <!--    </div>-->
+    <!--    <div class="layui-input-inline" style="width: 200px;">-->
+    <!--        <label>-->
+    <!--            <select lay-search name="" id="">-->
+    <!--                <option value="">全部厂商</option>-->
+    <!--                <option value="1">华为</option>-->
+    <!--                <option value="1">苹果</option>-->
+    <!--                <option value="1">小米</option>-->
+    <!--                <option value="1">三星</option>-->
+    <!--                <option value="1">OPPO</option>-->
+    <!--                <option value="1">VIVO</option>-->
+    <!--            </select>-->
+    <!--        </label>-->
+    <!--    </div>-->
+    <!--    <div class="layui-input-inline" style="width: 200px;">-->
+    <!--        <label>-->
+    <!--            <select lay-search name="" id="">-->
+    <!--                <option value="">搜索名称</option>-->
+    <!--                <option value="1">橙芽</option>-->
+    <!--            </select>-->
+    <!--        </label>-->
+    <!--    </div>-->
 </div>
 {/block}
-{block name="script"}
+{block name="content"}
+<div class="padding">
+    <h3>概况统计</h3>
+    <div class="layui-card" style="margin-top: 20px">
+        <div class="layui-card-header flex" style="justify-content: space-between">
+            <div style="font-size: 16px">
+                概况数据 <span style="font-size: 12px">同比，就是跟去年同期比；环比，就是跟上一个周期比</span>
+            </div>
+            <div style="">
+                <div class="layui-btn layui-btn-normal layui-btn-sm">编辑</div>
+            </div>
+        </div>
+        <div class="layui-card-body">
+            <div id="echarts-1" style="width: calc(100% - 100px);height:400px;margin: 0 auto"></div>
+        </div>
+    </div>
+
+</div>
+{/block}
+{block name="footer"}
 <script>
     layui.use(['laydate'], function () {
         var laydate = layui.laydate
         var laydate1 = laydate.render({
-                elem: '#test2'
-                , range: true,
-                extrabtns: [
-                    {
-                        id: 'today',
-                        text: '今天',
-                        range: [new Date(new Date().setDate(new Date().getDate())), new Date(new Date().setDate(new Date().getDate()))]
-                    },
-                    {
-                        id: 'yesterday',
-                        text: '昨天',
-                        range: [new Date(new Date().setDate(new Date().getDate() - 1)), new Date(new Date().setDate(new Date().getDate() - 1))]
-                    },
-                    {
-                        id: 'lastday-7',
-                        text: '最近一周',
-                        range: [new Date(new Date().setDate(new Date().getDay() - 1)), new Date(new Date().setDate(new Date().getDate() - 1))]
-                    },
-                    {
-                        id: 'lastday-30',
-                        text: '最近一月',
-                        range: [new Date(new Date().setDate(new Date().getDate() - 30)), new Date(new Date().setDate(new Date().getDate() - 1))]
-                    }
-                    ,
-                    {
-                        id: 'lastday-90',
-                        text: '最近三个月',
-                        range: [new Date(new Date().setDate(new Date().getDate() - 90)), new Date(new Date().setDate(new Date().getDate() - 1))]
-                    },
-                    {
-                        id: 'lastday-30',
-                        text: '最近半年',
-                        range: [new Date(new Date().setDate(new Date().getDate() - 30)), new Date(new Date().setDate(new Date().getDate() - 1))]
-                    }
-                    ,
-                    {
-                        id: 'lastday-30',
-                        text: '最近一年',
-                        range: [new Date(new Date().setDate(new Date().getDate() - 30)), new Date(new Date().setDate(new Date().getDate() - 1))]
-                    }
-                ]
-            })
-        ;
+            elem: '#ctime'
+            , range: true,
+            extrabtns: [
+                {
+                    id: 'today',
+                    text: '今天',
+                    range: [new Date(new Date().setDate(new Date().getDate())), new Date(new Date().setDate(new Date().getDate()))]
+                },
+                {
+                    id: 'yesterday',
+                    text: '昨天',
+                    range: [new Date(new Date().setDate(new Date().getDate() - 1)), new Date(new Date().setDate(new Date().getDate() - 1))]
+                },
+                {
+                    id: 'lastday-7',
+                    text: '最近一周',
+                    range: [new Date(new Date().setDate(new Date().getDay() - 1)), new Date(new Date().setDate(new Date().getDate() - 1))]
+                },
+                {
+                    id: 'lastday-30',
+                    text: '最近一月',
+                    range: [new Date(new Date().setDate(new Date().getDate() - 30)), new Date(new Date().setDate(new Date().getDate() - 1))]
+                }
+                ,
+                {
+                    id: 'lastday-90',
+                    text: '最近三个月',
+                    range: [new Date(new Date().setDate(new Date().getDate() - 90)), new Date(new Date().setDate(new Date().getDate() - 1))]
+                },
+                {
+                    id: 'lastday-30',
+                    text: '最近半年',
+                    range: [new Date(new Date().setDate(new Date().getDate() - 30)), new Date(new Date().setDate(new Date().getDate() - 1))]
+                }
+                ,
+                {
+                    id: 'lastday-30',
+                    text: '最近一年',
+                    range: [new Date(new Date().setDate(new Date().getDate() - 30)), new Date(new Date().setDate(new Date().getDate() - 1))]
+                }
+            ]
+        })
+        var option = {
+            xAxis: {
+                type: 'category',
+                data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
+            },
+            yAxis: {
+                type: 'value'
+            },
+            tooltip: {
+                trigger: 'axis'
+            },
+            series: [{
+                data: [820, 932, 901, 934, 1290, 1330, 1320],
+                type: 'line',
+                smooth: true
+            }]
+        };
+        var echarts1 = echarts.init(document.getElementById('echarts-1'))
+        echarts1.setOption(option)
     })
 
 </script>

@@ -3,9 +3,7 @@
 namespace app\admin\controller;
 
 use app\admin\model\Users;
-use app\common\facade\Response;
-use think\Controller;
-use think\Request;
+use app\admin\facade\Response;
 
 class User extends BaseController
 {

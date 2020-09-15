@@ -1,7 +1,7 @@
 <?php
 
 
-namespace app\common;
+namespace app\admin\common;
 
 /**
  * 请求响应
