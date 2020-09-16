@@ -94,13 +94,14 @@
     <div>
         <span class="layui-breadcrumb">
           <a href="{:url('index')}">授权管理</a>
-          <a style="color: red !important;" href="">新增账号</a>
+          <a style="color: red !important;" href="">编辑账号</a>
         </span>
     </div>
     <div class="page-title">
-        新增账号
+        编辑账号
     </div>
     <form action="" class="layui-form">
+        <input type="hidden" name="id" value="{$Request.get.id}">
         <div class="layui-card">
             <div class="layui-card-header">
                 账号信息
@@ -112,6 +113,7 @@
                     </label>
                     <div class="layui-input-inline">
                         <input type="text" class="layui-input" required lay-verify="required" placeholder="请输入昵称"
+                               value="{$data.user.nickname}"
                                name="nickname">
                     </div>
                     <div class="layui-form-mid layui-word-aux">
@@ -124,6 +126,7 @@
                     </label>
                     <div class="layui-input-inline">
                         <input type="text" class="layui-input" required lay-verify="required" placeholder="请输入账号"
+                               value="{$data.user.name}"
                                name="name">
                     </div>
                 </div>
@@ -132,7 +135,7 @@
                         备注：
                     </label>
                     <div class="layui-input-inline">
-                        <input type="text" class="layui-input" placeholder="请输入备注"
+                        <input type="text" value="{$data.user.remark}" class="layui-input" placeholder="请输入备注"
                                name="remark">
                     </div>
                 </div>
@@ -229,17 +232,19 @@
 
         let first = true;
         xadmin.hide()
+
         //监听提交
         form.on('submit(create)', function (elem) {
             var data = {
                 name: elem.field.name,
                 nickname: elem.field.nickname,
                 remark: elem.field.remark,
+                id: elem.field.id,
                 permissions: active_ids
             }
-            $.post("{:url('save')}", data, function (res) {
+            $.post("{:url('update')}", data, function (res) {
                 if (res.code == 200) {
-                    layer.msg('添加成功', function () {
+                    layer.msg('更新成功', function () {
                         location.href = "{:url('index')}"
                     })
 
@@ -255,8 +260,8 @@
         var laytpl = layui.laytpl;
 
         var projects = [];
-        var active_projects = {};
-        var active_ids = {};
+        var active_projects = JSON.parse('{:json_encode($data.active_project)}')
+        var active_ids = JSON.parse('{:json_encode($data.active_ids)}');
         var curr = 1;
         var name = ''
         searchProjects();
@@ -317,18 +322,40 @@
             })
         }
 
+        function checkAll(type) {
+            var data = projects.data
+            if (type) {
+                for (var key in data) {
+                    active_ids[data[key].id] = 1;
+                    active_projects[data[key].id] = data[key]
+                }
+            } else {
+                for (var key in data) {
+                    active_ids[data[key].id] = false;
+                    delete active_projects[data[key].id]
+                }
+            }
+        }
+
         form.on('checkbox(transfer-checkbox-left)', function (data) {
             // 左侧复选框
             var index = data.value;
-            var item = projects.data[index]
-            if (data.elem.checked == true) {
-                active_ids[item.id] = 1;
-                active_projects[item.id] = item
+            if (index == 'all') {
+                checkAll(data.elem.checked)
+                list('right', active_projects)
+                list('left', projects)
+
             } else {
-                active_ids[item.id] = false;
-                delete active_projects[item.id]
+                var item = projects.data[index]
+                if (data.elem.checked == true) {
+                    active_ids[item.id] = 1;
+                    active_projects[item.id] = item
+                } else {
+                    active_ids[item.id] = false;
+                    delete active_projects[item.id]
+                }
+                list('right', active_projects)
             }
-            list('right', active_projects)
         })
         $(".transfer-search").on('input', 'input', function () {
             // 左侧搜索

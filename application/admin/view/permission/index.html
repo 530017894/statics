@@ -47,9 +47,9 @@
     <button class="layui-btn layui-btn-warm layui-btn-sm" onclick="passwd({{d.id}})">
         <i class="layui-icon">&#xe669;</i>重置密码
     </button>
-    <button class="layui-btn layui-btn-normal layui-btn-sm" onclick="edit({{d.id}})">
+    <a class="layui-btn layui-btn-normal layui-btn-sm" href="{:url('edit')}?id={{d.id}}" >
         <i class="layui-icon">&#xe642;</i>编辑
-    </button>
+    </a>
     {{# if(d.id != 1) { }}
     <button class="layui-btn layui-btn-danger layui-btn-sm" onclick="del({{d.id}})">
         <i class="layui-icon ">&#xe640;</i>删除
@@ -88,7 +88,8 @@
             elem: '#table',
             url: "{:url('')}",
             cols: [[ //表头
-                {field: 'name', title: '用户名称', templet: "#table-name"}
+                {field: 'nickname', title: '用户名称'},
+                {field: 'name', title: '账号', templet: "#table-name"}
                 , {field: 'remark', width: 300, title: '备注'}
                 , {field: 'permission', width: 150, align: "center", title: '管理的项目', templet: "#table-permission"}
                 , {field: 'ctime', title: '创建时间',}
@@ -122,10 +123,6 @@
 
     function permission(id) {
         xadmin.open('管理的项目', '{:url("permission")}?id='+id, 700, 500);
-    }
-
-    function edit(id) {
-        xadmin.open('修改账户', "{:url('edit')}?id=" + id, 700, 600)
     }
 
     function del(id) {

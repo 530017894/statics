@@ -317,18 +317,41 @@
             })
         }
 
+        function checkAll(type) {
+            var data = projects.data
+            if (type) {
+                for (var key in data) {
+                    active_ids[data[key].id] = 1;
+                    active_projects[data[key].id] = data[key]
+                }
+            } else {
+                for (var key in data) {
+                    active_ids[data[key].id] = false;
+                    delete active_projects[data[key].id]
+                }
+            }
+        }
+
+
         form.on('checkbox(transfer-checkbox-left)', function (data) {
             // 左侧复选框
             var index = data.value;
-            var item = projects.data[index]
-            if (data.elem.checked == true) {
-                active_ids[item.id] = 1;
-                active_projects[item.id] = item
+            if (index == 'all') {
+                checkAll(data.elem.checked)
+                list('right', active_projects)
+                list('left', active_projects)
+
             } else {
-                active_ids[item.id] = false;
-                delete active_projects[item.id]
+                var item = projects.data[index]
+                if (data.elem.checked == true) {
+                    active_ids[item.id] = 1;
+                    active_projects[item.id] = item
+                } else {
+                    active_ids[item.id] = false;
+                    delete active_projects[item.id]
+                }
+                list('right', active_projects)
             }
-            list('right', active_projects)
         })
         $(".transfer-search").on('input', 'input', function () {
             // 左侧搜索

@@ -77,32 +77,13 @@
 </script>
 <script type="text/html" id="table-platform">
     <div class="agent-list sm">
-        {{# if(d.platform.indexOf('1') != -1){ }}
-        <div class="agent-item active">
-            <i class="icon_font icon-pc"></i>
+        {volist name="$platform_config" id="vo" }
+        {{# if(d.platform.indexOf('{$key}') != -1){ }}
+        <div class="agent-item active" title="{$vo.name}">
+            <i class="icon_font {$vo.icon}"></i>
         </div>
         {{# } }}
-        {{# if(d.platform.indexOf('2') != -1){ }}
-        <div class="agent-item active">
-            <i class="icon_font icon-shouji"></i>
-        </div>
-        {{# } }}
-        {{# if(d.platform.indexOf('3') != -1){ }}
-
-        <div class="agent-item active">
-            <i class="icon_font icon-ios"></i>
-        </div>
-        {{# } }}
-        {{# if(d.platform.indexOf('4') != -1){ }}
-        <div class="agent-item active">
-            <i class="icon_font icon-android"></i>
-        </div>
-        {{# } }}
-        {{# if(d.platform.indexOf('5') != -1){ }}
-        <div class="agent-item active">
-            <i class="icon_font icon-xiaochengxu"></i>
-        </div>
-        {{# } }}
+        {/volist}
     </div>
 </script>
 <script>

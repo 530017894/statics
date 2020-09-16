@@ -73,7 +73,8 @@ class BaseController extends Controller
         $this->assign('platform_id', cookie('platform_id'));
         $this->assign('where', []);
         $this->assign('is_admin', $this->is_admin);
-
+        $platform_config = config('system.platform');
+        $this->assign('platform_config', $platform_config);
     }
 
     /**
@@ -118,6 +119,7 @@ class BaseController extends Controller
         } else {
             $this->assign('permission', 1);
         }
+
         return true;
     }
 

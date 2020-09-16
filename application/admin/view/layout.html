@@ -27,39 +27,18 @@
                 <div class=" flex module-select">
                     <select name="project" lay-filter="project" lay-search>
                         {volist name="$projects" id="vo"}
-                        <option {$project.id == $vo.id?'selected':''} value="{$vo.id}">{$vo.name}</option>
+                        <option {$project.id== $vo.id?'selected':''} value="{$vo.id}">{$vo.name}</option>
                         {/volist}
                     </select>
                 </div>
                 <div class=" flex">
                     <!--平台-->
                     <div id="agent_list" class="agent-list">
-                        {if array_search('1',$project.platform) !== false}
-                        <div data-id="1" class="agent-item {$platform_id == '1'?'active':''}">
-                            <i class="icon_font icon-pc"></i>
+                        {volist name="$project.platform" id="vo" }
+                        <div data-id="{$vo}" title="{$platform_config[$vo]['name']}" class="agent-item {$platform_id == $vo?'active':''}">
+                            <i class="icon_font {$platform_config[$vo]['icon']}"></i>
                         </div>
-                        {/if}
-                        {if array_search('2',$project.platform) !== false}
-
-                        <div data-id="2" class="agent-item {$platform_id == '2'?'active':''}">
-                            <i class="icon_font icon-shouji"></i>
-                        </div>
-                        {/if}
-                        {if array_search('3',$project.platform) !== false}
-                        <div data-id="3" class="agent-item {$platform_id == '3'?'active':''}">
-                            <i class="icon_font icon-ios"></i>
-                        </div>
-                        {/if}
-                        {if array_search('4',$project.platform) !== false}
-                        <div data-id="4" class="agent-item {$platform_id == '4'?'active':''}">
-                            <i class="icon_font icon-android"></i>
-                        </div>
-                        {/if}
-                        {if array_search('5',$project.platform) !== false}
-                        <div data-id="5" class="agent-item {$platform_id == 5?'active':''}">
-                            <i class="icon_font icon-xiaochengxu"></i>
-                        </div>
-                        {/if}
+                        {/volist}
                     </div>
                 </div>
                 <div id="tools-left" class=" flex" style="justify-content: flex-end;flex: 1">

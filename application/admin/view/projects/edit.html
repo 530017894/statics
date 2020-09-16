@@ -24,29 +24,17 @@
             <div class="layui-input-block">
                 <div class="">
                     <div id="agent-list" class="agent-list">
-                        <div class="agent-item ">
-                            <i class="icon_font icon-pc"></i>
+                        {volist name="$platform_config" id="vo" }
+                        <div class="agent-item " title="{$vo.name}">
+                            <i class="icon_font {$vo.icon}"></i>
                         </div>
-                        <div class="agent-item ">
-                            <i class="icon_font icon-shouji"></i>
-                        </div>
-                        <div class="agent-item ">
-                            <i class="icon_font icon-ios"></i>
-                        </div>
-                        <div class="agent-item ">
-                            <i class="icon_font icon-android"></i>
-                        </div>
-                        <div class="agent-item ">
-                            <i class="icon_font icon-xiaochengxu"></i>
-                        </div>
+                        {/volist}
                     </div>
                 </div>
                 <div class="input-list">
-                    <input type="hidden" name="platform.1" value="0" title="电脑网页">
-                    <input type="hidden" name="platform.2" value="0" title="手机网页">
-                    <input type="hidden" name="platform.3" value="0" title="苹果">
-                    <input type="hidden" name="platform.4" value="0" title="安卓">
-                    <input type="hidden" name="platform.5" value="0" title="小程序">
+                    {volist name="$platform_config" id="vo" }
+                    <input type="hidden" name="platform.{$key}" value="0" title="{$vo.name}">
+                    {/volist}
                 </div>
             </div>
         </div>
