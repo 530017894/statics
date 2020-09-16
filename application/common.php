@@ -38,12 +38,26 @@ function verifyPasswrod($string, $password)
     return password_verify($string, $password);
 }
 
+/**
+ * 毫秒时间
+ * @return float
+ * author <马良 1826888766@qq.com>
+ * time 2020/9/15 18:32
+ */
 function microtime_float()
 {
     list($usec, $sec) = explode(" ", microtime());
     return ((float)$usec + (float)$sec);
 }
 
+/**
+ * 渲染页面权限
+ * @param string $value 权限类型
+ *
+ * @return string
+ * author <马良 1826888766@qq.com>
+ * time 2020/9/15 18:31
+ */
 function decodePermission($value)
 {
     return ['', '管理员', '运营'][$value];

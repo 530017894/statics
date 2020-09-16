@@ -1,0 +1,15 @@
+{extend name="public:page" /}
+{block name="meta"}
+<!--头信息-->
+{/block}
+{block name="content"}
+<!--内容-->
+<div class="padding">
+    {volist name="$projects" id="vo"}
+    <div class="padding">{$vo.name}：{$permissions[$vo.id]|decodePermission}</div>
+    {/volist}
+</div>
+{/block}
+{block name="footer"}
+<!--脚本-->
+{/block}

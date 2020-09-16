@@ -10,35 +10,22 @@
 
 {block name="content"}
 <div class="padding">
-    <div class="page-title">
-        全部项目
-    </div>
-    <div class="layui-card" >
-        <div class="layui-card-header flex" style="justify-content: space-between">项目列表
 
-            <button class="layui-btn layui-btn-normal layui-btn-sm"
-                    onclick=xadmin.open('添加项目','{:url("create")}',700,600)><i
-                    class="layui-icon"></i>添加项目
-            </button>
+    <div class="page-title">
+        授权管理
+    </div>
+    <div class="layui-card">
+        <div class="layui-card-header flex" style="justify-content: space-between">授权列表
+
+            <a class="layui-btn layui-btn-normal layui-btn-sm"
+               href='{:url("create")}'><i
+                    class="layui-icon"></i>新增账号
+            </a>
         </div>
         <div class="layui-card-body">
             <div class="layui-row layui-col-space15">
                 <div class="layui-col-md12">
                     <div class="layui-card">
-                        <div class="layui-card-body ">
-                            <form class="layui-form layui-col-space5">
-
-                                <div class="layui-inline layui-show-xs-block">
-                                    <input type="text" name="username" placeholder="请搜索应用名称" autocomplete="off"
-                                           class="layui-input">
-                                </div>
-                                <div class="layui-inline layui-show-xs-block">
-                                    <button class="layui-btn layui-btn-sm layui-btn-normal" lay-submit=""
-                                            lay-filter="sreach"><i
-                                            class="layui-icon">&#xe615;</i></button>
-                                </div>
-                            </form>
-                        </div>
                         <div class="layui-card-body ">
                             <table class="layui-table layui-form" id="table"></table>
                         </div>
@@ -57,16 +44,21 @@
 
 {block name="footer"}
 <script type="text/html" id="tools">
+    <button class="layui-btn layui-btn-warm layui-btn-sm" onclick="passwd({{d.id}})">
+        <i class="layui-icon">&#xe669;</i>重置密码
+    </button>
     <button class="layui-btn layui-btn-normal layui-btn-sm" onclick="edit({{d.id}})">
         <i class="layui-icon">&#xe642;</i>编辑
     </button>
-
+    {{# if(d.id != 1) { }}
     <button class="layui-btn layui-btn-danger layui-btn-sm" onclick="del({{d.id}})">
         <i class="layui-icon ">&#xe640;</i>删除
     </button>
+    {{# } }}
+
 </script>
 <script type="text/html" id="table-name">
-    <a class="link" href={:url('index/index')}?project_id={{d.id}}>{{d.name}}</a>
+    {{d.name}}
 </script>
 <script type="text/html" id="table-is_static">
 
@@ -75,58 +67,32 @@
            value="{{d.id}}" lay-skin="switch"
            lay-text="开启|关闭">
 </script>
-<script type="text/html" id="table-platform">
-    <div class="agent-list sm">
-        {{# if(d.platform.indexOf('1') != -1){ }}
-        <div class="agent-item active">
-            <i class="icon_font icon-pc"></i>
-        </div>
-        {{# } }}
-        {{# if(d.platform.indexOf('2') != -1){ }}
-        <div class="agent-item active">
-            <i class="icon_font icon-shouji"></i>
-        </div>
-        {{# } }}
-        {{# if(d.platform.indexOf('3') != -1){ }}
-
-        <div class="agent-item active">
-            <i class="icon_font icon-ios"></i>
-        </div>
-        {{# } }}
-        {{# if(d.platform.indexOf('4') != -1){ }}
-        <div class="agent-item active">
-            <i class="icon_font icon-android"></i>
-        </div>
-        {{# } }}
-        {{# if(d.platform.indexOf('5') != -1){ }}
-        <div class="agent-item active">
-            <i class="icon_font icon-xiaochengxu"></i>
-        </div>
-        {{# } }}
-    </div>
+<script type="text/html" id="table-permission">
+    {{# if (d.id != 1) {}}
+    <button class="layui-btn layui-btn-normal layui-btn-sm" onclick="permission({{d.id}})">
+        查看详情
+    </button>
+    {{# } else {}}
+    全部权限
+    {{# } }}
 </script>
 <script>
     layui.use(['laydate', 'jquery', 'form'], function () {
         var laydate = layui.laydate;
         var form = layui.form;
         var $ = layui.$;
-        var laypage = layui.laypage;
         let first = true;
         xadmin.hide()
-//执行一个laypage实例
 
         tableRender({
             elem: '#table',
             url: "{:url('')}",
             cols: [[ //表头
-                {field: 'name', title: '项目名称', templet: "#table-name"}
-                , {field: 'platform', width: 300, title: '项目平台', templet: "#table-platform"}
-                , {field: 'domain', title: '项目域名',}
-                , {field: 'is_static', title: '是否统计', templet: "#table-is_static"}
-                , {field: 'user_account', title: '累计用户',}
+                {field: 'name', title: '用户名称', templet: "#table-name"}
+                , {field: 'remark', width: 300, title: '备注'}
+                , {field: 'permission', width: 150, align: "center", title: '管理的项目', templet: "#table-permission"}
                 , {field: 'ctime', title: '创建时间',}
-                , {field: 'mtime', title: '更新时间',}
-                , {field: 'tools', width: 200, title: '操作', templet: "#tools"}
+                , {field: 'tools', width: 300, title: '操作', templet: "#tools"}
             ]]
         })
         form.on("switch(is_static)", function (e) {
@@ -154,15 +120,19 @@
         });
     });
 
-    function edit(id) {
-        xadmin.open('修改项目', "{:url('edit')}?id=" + id, 700, 600)
+    function permission(id) {
+        xadmin.open('管理的项目', '{:url("permission")}?id='+id, 700, 500);
     }
-    
+
+    function edit(id) {
+        xadmin.open('修改账户', "{:url('edit')}?id=" + id, 700, 600)
+    }
+
     function del(id) {
-        layer.confirm('确认删除当前项目吗？',function (index) {
-            $.post("{:url('delete')}?",{
-                id:id
-            },function (res){
+        layer.confirm('确认删除当前账户吗？', function (index) {
+            $.post("{:url('delete')}?", {
+                id: id
+            }, function (res) {
                 if (res.code == 200) {
                     layer.msg('删除成功')
                     tableIns.reload()
@@ -173,6 +143,9 @@
         })
     }
 
+    function passwd(id) {
+        xadmin.open('重置密码', "{:url('password')}?id=" + id, 700, 600)
+    }
 
     function delAll(argument) {
 

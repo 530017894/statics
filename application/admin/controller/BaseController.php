@@ -13,17 +13,35 @@ class BaseController extends Controller
      * @var array 用户信息
      */
     protected $user = null;
+    /**
+     * @var null 所有权限
+     */
     protected $permission = null;
+    /**
+     * @var \app\admin\model\Projects 当前项目
+     */
     protected $project = null;
+    /**
+     * @var array 本次请求的数据
+     */
     protected $param = [];
     /**
      * @var bool  验证失败抛出异常
      */
     protected $failException = true;
+    protected $is_admin = true;
 
+    /**
+     * 初始化
+     *
+     * @throws \think\db\exception\DataNotFoundException
+     * @throws \think\db\exception\ModelNotFoundException
+     * @throws \think\exception\DbException
+     * author <马良 1826888766@qq.com>
+     * time 2020/9/16 8:47
+     */
     public function initialize()
     {
-
         $user = $this->getUser();
         if ($user == false) {
             $this->redirect(url('login/index'));
@@ -32,10 +50,6 @@ class BaseController extends Controller
         /** 检测是否传入项目id */
         if (isset($this->param['project_id'])) {
             cookie('project_id', $this->param['project_id']);
-        } else {
-            if (!cookie('project_id') && $this->request->controller() != 'Projects') {
-                $this->redirect(url('projects/index'));
-            }
         }
 
         $permission = $this->getPermission();
@@ -58,6 +72,8 @@ class BaseController extends Controller
         }
         $this->assign('platform_id', cookie('platform_id'));
         $this->assign('where', []);
+        $this->assign('is_admin', $this->is_admin);
+
     }
 
     /**
@@ -90,20 +106,34 @@ class BaseController extends Controller
      */
     public function getProject()
     {
-        $project_id = cookie('project_id') ?: $this->getProjectIds()[0];
+        $project_id = cookie('project_id') ? cookie('project_id') : $this->getProjectIds()[0];
         $project = \app\admin\model\Projects::get($project_id);
         if (!$project) {
             return false;
         }
         $this->project = $project;
         $this->assign('project', $project);
-        $this->assign('permission', $this->permission[$project_id]['permission']);
+        if (!$this->is_admin) {
+            $this->assign('permission', $this->permission[$project_id]['permission']);
+        } else {
+            $this->assign('permission', 1);
+        }
         return true;
     }
 
+    /**
+     * 获取所有拥有权限的项目
+     *
+     * @return bool
+     * @throws \think\db\exception\DataNotFoundException
+     * @throws \think\db\exception\ModelNotFoundException
+     * @throws \think\exception\DbException
+     * author <马良 1826888766@qq.com>
+     * time 2020/9/16 8:31
+     */
     public function getProjects()
     {
-        $projects = \app\admin\model\Projects::where('id', 'in', $this->getProjectIds())->select();
+        $projects = \app\admin\model\Projects::where('id', 'in', $this->getProjectIds())->cache('projects-select')->field('id,name')->select();
         $this->projects = $projects;
         $this->assign('projects', $projects);
         return true;
@@ -118,9 +148,20 @@ class BaseController extends Controller
      */
     public function getProjectIds()
     {
-        return array_keys($this->permission);
+        if (!$this->is_admin) {
+
+            return array_keys($this->permission);
+        }
+        return \app\admin\model\Projects::where('status', 1)->column('id');
     }
 
+    /**
+     * 获取用户
+     *
+     * @return bool
+     * author <马良 1826888766@qq.com>
+     * time 2020/9/16 8:32
+     */
     public function getUser()
     {
         $user = cookie('user');
@@ -130,6 +171,7 @@ class BaseController extends Controller
         $user = json_decode($user, true);
         $this->assign('user', $user);
         $this->user = $user;
+        $this->is_admin = $user['id'] == 1;
         return true;
     }
 }

@@ -25,9 +25,9 @@
         <div class=" top ">
             <div class="flex layui-form" style="height: 100%;padding: 0 15px">
                 <div class=" flex module-select">
-                    <select name="project" lay-filter="project">
+                    <select name="project" lay-filter="project" lay-search>
                         {volist name="$projects" id="vo"}
-                        <option value="{$vo.id}">{$vo.name}</option>
+                        <option {$project.id == $vo.id?'selected':''} value="{$vo.id}">{$vo.name}</option>
                         {/volist}
                     </select>
                 </div>

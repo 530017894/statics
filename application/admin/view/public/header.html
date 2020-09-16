@@ -4,17 +4,21 @@
     <div class="left_open">
         <a><i title="展开左侧栏" class="iconfont">&#xe699;</i></a>
     </div>
+
     <ul class="layui-nav left" lay-filter="" style="display: flex;flex: 1;justify-content: center">
+        {if $is_admin}
         <li class="layui-nav-item to-index">
             <a href='{:url("projects/index")}'>
                 <cite>全部项目</cite>
             </a></li>
         <li class="layui-nav-item to-index">
-            <a href='{:url("permission/index")}' ><cite>授权管理</cite></a></li>
+            <a href='{:url("permission/index")}'><cite>授权管理</cite></a></li>
+        {/if}
     </ul>
+
     <ul class="layui-nav right" lay-filter="">
         <li class="layui-nav-item">
-            <a href="javascript:;">{$user.nick_name}【{$permission|decodePermission}】</a>
+            <a href="javascript:;">{$user.nickname}【{$permission|decodePermission}】</a>
             <dl class="layui-nav-child">
                 <!-- 二级菜单 -->
                 <dd>

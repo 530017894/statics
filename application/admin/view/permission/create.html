@@ -1,0 +1,367 @@
+{extend name="layout" /}
+{block name="meta"}
+<!--头信息-->
+<style>
+    .top-box {
+        display: none;
+    }
+
+    .transfer {
+        display: flex;
+    }
+
+    .transfer-item {
+        width: 500px;
+        border: 1px solid #F2F2F2;
+        overflow: hidden;
+    }
+
+    .transfer-item > .layui-card > .layui-card-body {
+        height: 300px;
+        overflow: auto;
+    }
+
+    .transfer-left {
+        margin-right: 10px;
+    }
+
+    .transfer-right {
+        margin-left: 10px;
+    }
+
+    .transfer-tools {
+        display: flex;
+        align-items: center;
+        flex-direction: column;
+        width: 50px;
+        justify-content: center;
+    }
+
+    .transfer-tools .layui-btn {
+        margin: 0;
+    }
+
+    .transfer-list {
+
+    }
+
+    .transfer-list-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 15px 0;
+        position: relative;
+    }
+
+    .transfer-list-item .tools {
+        position: absolute;
+        right: 0;
+        top: 50%;
+        transform: translateY(-50%);
+    }
+
+    .tools > .layui-form-radio {
+        margin-top: 0;
+    }
+
+    .transfer-scroll {
+        overflow-x: hidden;
+        overflow-y: auto;
+        margin: 10px 0;
+    }
+
+    .transfer-search {
+        position: relative;
+    }
+
+    .transfer-search i {
+        position: absolute;
+        left: 10px;
+        top: 7px;
+    }
+
+    #page .layui-laypage {
+        margin: 0;
+    }
+
+    .transfer-search input {
+        padding-left: 30px;
+    }
+</style>
+{/block}
+{block name="content"}
+<div class="padding">
+    <div>
+        <span class="layui-breadcrumb">
+          <a href="{:url('index')}">授权管理</a>
+          <a style="color: red !important;" href="">新增账号</a>
+        </span>
+    </div>
+    <div class="page-title">
+        新增账号
+    </div>
+    <form action="" class="layui-form">
+        <div class="layui-card">
+            <div class="layui-card-header">
+                账号信息
+            </div>
+            <div class="layui-card-body">
+                <div class="layui-form-item">
+                    <label class="layui-form-label">
+                        <span class="x-red">*</span> 昵称：
+                    </label>
+                    <div class="layui-input-inline">
+                        <input type="text" class="layui-input" required lay-verify="required" placeholder="请输入昵称"
+                               name="nickname">
+                    </div>
+                    <div class="layui-form-mid layui-word-aux">
+                        默认密码：chengya
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">
+                        <span class="x-red">*</span> 账号：
+                    </label>
+                    <div class="layui-input-inline">
+                        <input type="text" class="layui-input" required lay-verify="required" placeholder="请输入账号"
+                               name="name">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">
+                        备注：
+                    </label>
+                    <div class="layui-input-inline">
+                        <input type="text" class="layui-input" placeholder="请输入备注"
+                               name="remark">
+                    </div>
+                </div>
+            </div>
+            <div class="layui-card-header">
+                权限设置 <span style="font-size: 12px;color: #999999">子应用管理员拥有某些应用的管理权限；查看用户仅可查看某些应用数据，无修改配置权</span>
+            </div>
+            <div class="layui-card-body">
+                <div class="transfer">
+                    <div class="transfer-item transfer-left">
+                        <div class="layui-card">
+                            <div class="layui-card-header">
+                                <input type="checkbox" lay-filter="transfer-checkbox-left" value="all" title="全选"
+                                       lay-skin="primary">
+                            </div>
+                            <div class="layui-card-body">
+                                <div class="transfer-search ">
+                                    <i class="layui-icon ">&#xe615;</i>
+                                    <input type="text" class="layui-input " lay-filter="transfer-search"
+                                           placeholder="搜索">
+                                </div>
+                                <div class="transfer-scroll" style="height: 200px">
+                                    <div id="transfer-list-left" class="transfer-list"></div>
+                                </div>
+                                <div class="transfer-page">
+                                    <div id="page"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="transfer-tools">
+                        <div class="layui-btn layui-btn-primary layui-btn-sm"><i
+                                class="layui-icon ">&#xe602;</i></div>
+                        <div class="layui-btn layui-btn-primary layui-btn-sm" style="margin-top: 10px"><i
+                                class="layui-icon ">&#xe603;</i></div>
+                    </div>
+                    <div class="transfer-item transfer-right">
+                        <div class="layui-card">
+                            <div class="layui-card-header">
+                                已选择
+                            </div>
+                            <div class="layui-card-body">
+                                <div id="transfer-list-right" class="transfer-list">
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="layui-card-body">
+                <button type="submit" class="layui-btn layui-btn-normal" lay-filter="create" lay-submit="">
+                    保存
+                </button>
+            </div>
+        </div>
+    </form>
+
+</div>
+{/block}
+{block name="footer"}
+<!--脚本-->
+<script type="text/html" id="transfer-list-tpl">
+
+    {{# if (d.total == 0) { }}
+    <div class="padding " style="text-align: center;color: #dddddd">无数据</div>
+    {{# } else { }}
+    {{#  for( var key in d.data){ var item = d.data[key],index=key; }}
+    <div class="transfer-list-item">
+        <input {{#if (d.active_ids[item.id]) { }} checked {{# }}} type="checkbox"
+               lay-filter="transfer-checkbox-{{d.type}}"
+               value="{{index}}" lay-skin="primary" title="{{item.name}}">
+        {{# if (d.type == 'right') { }}
+        <div class="tools">
+            <input {{#if (d.active_ids[item.id]== 1) { }} checked {{# }}} lay-filter="transfer-radio" type="radio"
+                   name="index{{item.id}}" value="{{index}}-1"
+                   title="子应用管理员">
+            <input {{#if (d.active_ids[item.id]== 2) { }} checked {{# }}} type="radio" lay-filter="transfer-radio"
+                   name="index{{item.id}}" value="{{index}}-2" title="查看用户">
+        </div>
+        {{# } }}
+    </div>
+    {{# } }}
+    {{# } }}
+
+
+</script>
+<script>
+    layui.use(['laydate', 'laytpl', 'laypage', 'jquery', 'form'], function () {
+        var laydate = layui.laydate;
+        var form = layui.form;
+        var $ = layui.$;
+        var laypage = layui.laypage;
+
+        let first = true;
+        xadmin.hide()
+        //监听提交
+        form.on('submit(create)', function (elem) {
+            var data = {
+                name: elem.field.name,
+                nickname: elem.field.nickname,
+                remark: elem.field.remark,
+                permissions: active_ids
+            }
+            $.post("{:url('save')}", data, function (res) {
+                if (res.code == 200) {
+                    layer.msg('添加成功', function () {
+                        location.href = "{:url('index')}"
+                    })
+
+                } else {
+                    layer.msg(res.msg)
+                }
+            })
+            return false;
+        });
+
+
+        // 穿梭框
+        var laytpl = layui.laytpl;
+
+        var projects = [];
+        var active_projects = {};
+        var active_ids = {};
+        var curr = 1;
+        var name = ''
+        searchProjects();
+
+        function searchProjects() {
+            $.post("{:url('projects/index')}", {
+                name: name,
+                page: curr
+            }, function (res) {
+                if (res.code == 200) {
+                    projects = res.data;
+                    render();
+                } else {
+                    layer.msg('查询失败')
+                }
+            })
+        }
+
+        function render() {
+            list('left', projects)
+            list('right', active_projects)
+            page()
+        }
+
+        function list(type, data) {
+            if (type == 'right') {
+                data = {
+                    data: data,
+                    total: Object.keys(data).length,
+                    type: "right",
+                }
+            } else {
+                data['type'] = 'left'
+            }
+            data['active_ids'] = active_ids;
+            let item = $("#transfer-list-tpl").html()
+            laytpl(item).render(data, function (html) {
+                $("#transfer-list-" + type).html(html)
+                form.render()
+            })
+        }
+
+        function page() {
+            laypage.render({
+                elem: 'page',
+                layout: ['prev', 'next'],
+                curr: projects.current_page,
+                limit: projects.per_page,
+                first: "首页"
+                , last: "尾页"
+                , count: projects.total //数据总数，从服务端得到
+                , jump: function (obj, first) {
+                    if (!first) {
+                        curr = obj.curr;
+                        searchProjects()
+                    }
+                }
+            })
+        }
+
+        form.on('checkbox(transfer-checkbox-left)', function (data) {
+            // 左侧复选框
+            var index = data.value;
+            var item = projects.data[index]
+            if (data.elem.checked == true) {
+                active_ids[item.id] = 1;
+                active_projects[item.id] = item
+            } else {
+                active_ids[item.id] = false;
+                delete active_projects[item.id]
+            }
+            list('right', active_projects)
+        })
+        $(".transfer-search").on('input', 'input', function () {
+            // 左侧搜索
+            curr = 1;
+            name = $(this).val();
+            searchProjects()
+        })
+        form.on('checkbox(transfer-checkbox-right)', function (data) {
+            // 右侧复选框
+            // 左侧复选框
+            var index = data.value;
+            var item = active_projects[index]
+            layer.confirm('确认取消该权限吗？', function (index) {
+                if (!data.elem.checked) {
+                    active_ids[item.id] = false;
+                    delete active_projects[item.id]
+                    list('left', projects)
+                    list('right', active_projects)
+
+                }
+                layer.close(index)
+            })
+            list('right', active_projects)
+
+        })
+        form.on("radio(transfer-radio)", function (data) {
+            var value = data.value.split('-')
+            var id = value[0];
+            value = value[1];
+            active_ids[id] = value;
+            list('right', active_projects)
+        })
+    })
+
+</script>
+{/block}

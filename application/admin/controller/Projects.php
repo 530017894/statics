@@ -10,10 +10,20 @@ use app\admin\model\Projects as ProjectsModel;
 
 class Projects extends BaseController
 {
+    public function initialize()
+    {
+        parent::initialize();
+        if (!$this->is_admin) {
+            $this->error('没有权限！');
+        }
+    }
     /**
-     * 显示资源列表
+     * 项目管理
      *
-     * @return \think\Response
+     * @return mixed|\think\response\Json
+     * @throws \think\exception\DbException
+     * author <马良 1826888766@qq.com>
+     * time 2020/9/16 8:40
      */
     public function index()
     {
@@ -24,9 +34,13 @@ class Projects extends BaseController
             //用户id
             $name = $this->request->param("name");
             if ($name) {
-                $where['name'] = array("like", "%" . $name . "%");
+                $where[] = array('name', "like", "%" . $name . "%");
             }
-            $where['status'] = 1;
+            $where[] = ['status', '=', 1];
+            // 非超级管理管理
+            if (!$this->isAdmin()) {
+                $where[] = ['id', 'in', $this->getProjectIds()];
+            }
             $data = ProjectsModel::where($where)->withAttr('platform')->order('ctime desc')->paginate($limit)->toArray();
             return Response::success($data);
         }
@@ -47,8 +61,6 @@ class Projects extends BaseController
     /**
      * 保存新建的资源
      *
-     * @param \think\Request $request
-     *
      * @return \think\Response
      */
     public function save()
@@ -58,10 +70,10 @@ class Projects extends BaseController
         Db::startTrans();
         try {
             $this->validate($param, $rule);
-            $projects = ProjectsModel::create($param);
+            $projects = ProjectsModel::cache('projects-select')->create($param);
             if ($projects->id) {
-                UserPermission::add($projects->id, 1, $this->getUser()['id']);
-            }else{
+                UserPermission::add($projects->id, 1, $this->user['id']);
+            } else {
                 throw new \Exception('创建项目失败');
             }
             Db::commit();
@@ -69,7 +81,6 @@ class Projects extends BaseController
             ProjectsModel::createModule($projects);
         } catch (\Exception $exception) {
             Db::rollback();
-            return \response($exception);
             return Response::instance()->fail(-1, $exception->getMessage());
         }
         return Response::instance()->success($projects);
@@ -116,7 +127,8 @@ class Projects extends BaseController
             return Response::instance()->fail(-1, "项目不存在");
         }
         $projects->data($request->param());
-        if ($projects->save()) {
+        $res = ProjectsModel::cache('projects-select')->where('id', $id)->update($request->param());
+        if ($res) {
             return Response::instance()->success($projects);
         }
         return Response::instance()->fail(-1, "系统错误，保存失败");
@@ -141,5 +153,10 @@ class Projects extends BaseController
             return Response::instance()->success();
         }
         return Response::instance()->fail(-1, "系统错误，删除失败");
+    }
+
+    public function isAdmin()
+    {
+        return $this->user['id'] == 1;
     }
 }

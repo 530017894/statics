@@ -29,6 +29,7 @@ class Login extends Controller
      */
     public function index()
     {
+
         if ($this->request->isPost()) {
             $param = $this->request->param();
             try {
@@ -56,6 +57,7 @@ class Login extends Controller
 
             return Response::success($user);
         }
+
         return $this->fetch();
     }
 

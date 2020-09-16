@@ -7,6 +7,16 @@ use app\admin\facade\Response;
 
 class User extends BaseController
 {
+
+    /**
+     * 修改密码
+     * @return mixed
+     * @throws \think\db\exception\DataNotFoundException
+     * @throws \think\db\exception\ModelNotFoundException
+     * @throws \think\exception\DbException
+     * author <马良 1826888766@qq.com>
+     * time 2020/9/16 8:39
+     */
     public function password()
     {
         if ($this->request->isAjax()) {
@@ -25,7 +35,7 @@ class User extends BaseController
                 return Response::instance()->fail(-1, $exception->getMessage());
             }
             $password = createPassword($param['new_password']);
-            $where = ['id' => $this->getUser()['id']];
+            $where = ['id' => $this->user['id']];
             $user = Users::where($where)->find();
             $user->password = $password;
             if ($user->save()) {
