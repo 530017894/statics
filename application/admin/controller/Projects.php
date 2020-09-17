@@ -41,7 +41,7 @@ class Projects extends BaseController
             if (!$this->isAdmin()) {
                 $where[] = ['id', 'in', $this->getProjectIds()];
             }
-            $data = ProjectsModel::where($where)->withAttr('platform')->order('ctime desc')->paginate($limit)->toArray();
+            $data = ProjectsModel::where($where)->order('ctime','desc')->paginate(10)->toArray();
             return Response::success($data);
         }
         return $this->fetch();
@@ -66,19 +66,17 @@ class Projects extends BaseController
     public function save()
     {
         $param = $this->request->param();
-        $rule = [];
+        $rule = [
+            'name|项目名称'=>'require',
+            'platform|平台'=>'require'
+        ];
         Db::startTrans();
         try {
             $this->validate($param, $rule);
-            $projects = ProjectsModel::cache('projects-select')->create($param);
-            if ($projects->id) {
-                UserPermission::add($projects->id, 1, $this->user['id']);
-            } else {
-                throw new \Exception('创建项目失败');
-            }
+            $projects = ProjectsModel::create($param);
+            ProjectsModel::createModule($projects);
             Db::commit();
             // 全部完成后创建对应表
-            ProjectsModel::createModule($projects);
         } catch (\Exception $exception) {
             Db::rollback();
             return Response::instance()->fail(-1, $exception->getMessage());

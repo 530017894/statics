@@ -53,12 +53,15 @@ class BaseController extends Controller
         }
 
         $permission = $this->getPermission();
-        if ($permission == false) {
+        if ($permission == false && !$this->is_admin) {
             $this->error('你没有权限访问', url('login/logout'));
         }
+
         $project = $this->getProject();
-        if ($project == false) {
+        if ($project == false && !$this->is_admin) {
             $this->error('项目已删除，或不存在', url('login/logout'));
+        } else if ($project == false && $this->is_admin && $this->request->controller() != "Projects") {
+            $this->redirect(url('projects/index'));
         }
         $this->getProjects();
 
@@ -66,7 +69,7 @@ class BaseController extends Controller
         if (isset($this->param['platform_id'])) {
             cookie('platform_id', $this->param['platform_id']);
         } else {
-            if (!cookie('platform_id')) {
+            if (!cookie('platform_id') && $this->project) {
                 cookie('platform_id', $this->project->platform[0]);
             }
         }
@@ -107,19 +110,22 @@ class BaseController extends Controller
      */
     public function getProject()
     {
-        $project_id = cookie('project_id') ? cookie('project_id') : $this->getProjectIds()[0];
-        $project = \app\admin\model\Projects::get($project_id);
-        if (!$project) {
-            return false;
+        $project_id = cookie('project_id');
+        $where = [];
+        if ($project_id) {
+            $where['id'] = $project_id;
         }
+        $project = \app\admin\model\Projects::where($where)->find();
         $this->project = $project;
         $this->assign('project', $project);
         if (!$this->is_admin) {
-            $this->assign('permission', $this->permission[$project_id]['permission']);
+            $this->assign('permission', $this->permission[$project->id]['permission']);
         } else {
             $this->assign('permission', 1);
         }
-
+        if (!$project) {
+            return false;
+        }
         return true;
     }
 
@@ -135,7 +141,7 @@ class BaseController extends Controller
      */
     public function getProjects()
     {
-        $projects = \app\admin\model\Projects::where('id', 'in', $this->getProjectIds())->cache('projects-select')->field('id,name')->select();
+        $projects = \app\admin\model\Projects::where('id', 'in', $this->getProjectIds())->field('id,name')->select();
         $this->projects = $projects;
         $this->assign('projects', $projects);
         return true;

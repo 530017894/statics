@@ -4,7 +4,10 @@
 namespace app\admin\model;
 
 
+use think\Container;
+use think\db\exception\DbException as Exception;
 use think\Model;
+use think\Paginator;
 
 class BaseModel extends Model
 {
@@ -36,6 +39,7 @@ class BaseModel extends Model
     {
         return $this->moduleId;
     }
+
 
 
 }
