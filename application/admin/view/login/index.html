@@ -62,9 +62,7 @@
 
             $.post('{:url("login/index")}', data.field, function (res) {
                 if (res.code == 200) {
-                    layer.msg('登录成功', function () {
-                        location.href = '{:url("index/index")}'
-                    });
+                    location.href = '{:url("index/index")}'
                 } else {
                     layer.msg(res.msg);
                 }
