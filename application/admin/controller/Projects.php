@@ -5,6 +5,7 @@ namespace app\admin\controller;
 use app\admin\model\UserPermission;
 use app\admin\facade\Response;
 use think\Db;
+use think\facade\Cache;
 use think\Request;
 use app\admin\model\Projects as ProjectsModel;
 
@@ -17,6 +18,7 @@ class Projects extends BaseController
             $this->error('没有权限！');
         }
     }
+
     /**
      * 项目管理
      *
@@ -41,7 +43,7 @@ class Projects extends BaseController
             if (!$this->isAdmin()) {
                 $where[] = ['id', 'in', $this->getProjectIds()];
             }
-            $data = ProjectsModel::where($where)->order('ctime','desc')->paginate(10)->toArray();
+            $data = ProjectsModel::where($where)->order('ctime', 'desc')->paginate(10)->toArray();
             return Response::success($data);
         }
         return $this->fetch();
@@ -67,14 +69,15 @@ class Projects extends BaseController
     {
         $param = $this->request->param();
         $rule = [
-            'name|项目名称'=>'require',
-            'platform|平台'=>'require'
+            'name|项目名称' => 'require',
+            'platform|平台' => 'require'
         ];
         Db::startTrans();
         try {
             $this->validate($param, $rule);
             $projects = ProjectsModel::create($param);
             ProjectsModel::createModule($projects);
+            Cache::rm('project_select');
             Db::commit();
             // 全部完成后创建对应表
         } catch (\Exception $exception) {
@@ -148,6 +151,8 @@ class Projects extends BaseController
         }
         $project->status = 0;
         if ($project->save()) {
+            Cache::rm('project_select');
+
             return Response::instance()->success();
         }
         return Response::instance()->fail(-1, "系统错误，删除失败");
