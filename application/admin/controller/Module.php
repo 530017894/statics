@@ -31,11 +31,13 @@ class Module extends BaseController
         } catch (\Exception $exception) {
             return Response::fail(-1, $exception->getMessage());
         }
-        $data = Mode::instance()->project($this->project->id)->create([
+        $data = Mode::project($this->project->id)->insert([
             'name' => $this->param['name'],
             'type' => $this->param['type'],
             'display' => $this->param['display'],
             'status' => 1,
+            'ctime' => time(),
+            'mtime' => time(),
         ]);
         return Response::success($data);
     }
