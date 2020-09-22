@@ -30,6 +30,7 @@ class BaseController extends Controller
      */
     protected $failException = true;
     protected $is_admin = true;
+    protected $platform_id = null;
 
     /**
      * 初始化
@@ -73,6 +74,7 @@ class BaseController extends Controller
                 cookie('platform_id', $this->project->platform[0]);
             }
         }
+        $this->platform_id = cookie('platform_id');
         $this->assign('platform_id', cookie('platform_id'));
         $this->assign('where', []);
         $this->assign('is_admin', $this->is_admin);

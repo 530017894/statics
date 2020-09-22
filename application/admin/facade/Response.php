@@ -9,7 +9,7 @@ use think\response\Json;
 /**
  * @see \think\Cache
  * @mixin \think\Cache
- * @method Json success(array $data, int $code=0, string $msg="") static 正确返回
+ * @method Json success(mixed $data, int $code=0, string $msg="") static 正确返回
  * @method Json fail(int $code, string $msg = "") static 错误返回
  */
 class Response extends Facade

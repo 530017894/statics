@@ -3,6 +3,7 @@
 namespace app\admin\controller;
 
 use app\admin\facade\Response;
+use app\admin\model\Mode;
 
 class Module extends BaseController
 {
@@ -27,8 +28,15 @@ class Module extends BaseController
         ];
         try {
             $this->validate($this->param, $rule);
-        }catch (\Exception $exception){
-            return Response::fail(-1, $exception->ma);
+        } catch (\Exception $exception) {
+            return Response::fail(-1, $exception->getMessage());
         }
+        $data = Mode::instance()->project($this->project->id)->create([
+            'name' => $this->param['name'],
+            'type' => $this->param['type'],
+            'display' => $this->param['display'],
+            'status' => 1,
+        ]);
+        return Response::success($data);
     }
 }

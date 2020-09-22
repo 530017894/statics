@@ -266,7 +266,7 @@
             status: 1
         }];
     var custom_modes = [];
-    var project_id = '{$project_id}';
+    var project_id = '{$project.id}';
     layui.use(['laytpl', 'form', 'layer', 'jquery'], function () {
         var laytpl = layui.laytpl, form = layui.form, layer = layui.layer, $ = layui.jquery;
         /**
@@ -351,6 +351,13 @@
             }, yes: function (index, layero) {
                 let data = layui.$(layero).find('form').toJSON();
                 console.log(data)
+                let display = [];
+                for (var key in active) {
+                    if (active[key]) {
+                        display.push(key)
+                    }
+                }
+                data['display'] = display.join(',')
                 data['project_id'] = project_id;
                 layui.$.post("{:url('modeSave')}", data, function (res) {
                     if (res.code == 200) {
