@@ -124,7 +124,7 @@ VALUES (3, '分享分析', NULL, NULL, NULL, 1, NULL, NULL);
 INSERT INTO `cy_module_MODULE_ID`
 VALUES (4, '设备属性', NULL, NULL, NULL, 1, NULL, NULL);
 
--------------
+-- -----------
 -- Table structure for cy_static_area
 -- ----------------------------
 DROP TABLE IF EXISTS `cy_static_area_MODULE_ID`;
@@ -132,9 +132,11 @@ CREATE TABLE `cy_static_area_MODULE_ID`
 (
     `id`       int(11)                                                 NOT NULL AUTO_INCREMENT COMMENT 'Id',
     `province` varchar(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci NULL DEFAULT NULL COMMENT '省',
+    `platform` tinyint(1)                                              NULL DEFAULT NULL COMMENT '平台\r\n\r\n1,pc端网页\r\n2,手机端网页\r\n3,ios\r\n4,安卓\r\n5,小程序',
     `city`     varchar(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci NULL DEFAULT NULL COMMENT '市',
     `account`  int(11)                                                 NULL DEFAULT NULL COMMENT '数量',
-    `day`      int(11)                                                 NULL DEFAULT NULL COMMENT '时间',
+    `day`      int(11)                                                 NULL DEFAULT NULL COMMENT '日期',
+    `hour`     int(11)                                                 NULL DEFAULT NULL COMMENT '时间',
     PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB
   AUTO_INCREMENT = 1
@@ -152,11 +154,13 @@ CREATE TABLE `cy_static_area_MODULE_ID`
 DROP TABLE IF EXISTS `cy_static_data_MODULE_ID`;
 CREATE TABLE `cy_static_data_MODULE_ID`
 (
-    `id`       int(11) NOT NULL AUTO_INCREMENT,
-    `point_id` int(11) NULL DEFAULT NULL COMMENT '埋点id',
-    `account`  int(11) NULL DEFAULT NULL COMMENT '统计数量',
-    `day`      int(11) NULL DEFAULT NULL COMMENT '统计时间',
-    `expoint`  int(11) NULL DEFAULT NULL COMMENT '入口埋点',
+    `id`       int(11)    NOT NULL AUTO_INCREMENT,
+    `point_id` int(11)    NULL DEFAULT NULL COMMENT '埋点id',
+    `account`  int(11)    NULL DEFAULT NULL COMMENT '统计数量',
+    `platform` tinyint(1) NULL DEFAULT NULL COMMENT '平台\r\n\r\n1,pc端网页\r\n2,手机端网页\r\n3,ios\r\n4,安卓\r\n5,小程序',
+    `day`      int(11)    NULL DEFAULT NULL COMMENT '日期',
+    `hour`     int(11)    NULL DEFAULT NULL COMMENT '时间',
+    `expoint`  int(11)    NULL DEFAULT NULL COMMENT '入口埋点',
     PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB
   AUTO_INCREMENT = 1
@@ -178,9 +182,11 @@ CREATE TABLE `cy_static_device_MODULE_ID`
     `platform`       tinyint(1)                                              NULL DEFAULT NULL COMMENT '平台类型：\r\n1,pc端网页\r\n2,手机端网页\r\n3,ios\r\n4,安卓\r\n5,小程序',
     `device_name`    varchar(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci NULL DEFAULT NULL COMMENT '设备名称',
     `device_type`    varchar(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci NULL DEFAULT NULL COMMENT '设备类型',
+    `device_brand`   varchar(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci NULL DEFAULT NULL COMMENT '设备厂商',
     `device_version` varchar(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci NULL DEFAULT NULL COMMENT '版本号',
     `account`        int(11)                                                 NULL DEFAULT NULL COMMENT '统计数量',
-    `day`            int(11)                                                 NULL DEFAULT NULL COMMENT '日期小时（如：2020091104）',
+    `day`            int(11)                                                 NULL DEFAULT NULL COMMENT '日期',
+    `hour`           int(11)                                                 NULL DEFAULT NULL COMMENT '时间',
     PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB
   AUTO_INCREMENT = 1
@@ -201,12 +207,15 @@ CREATE TABLE `cy_view_user_MODULE_ID`
     `id`             int(11)                                                 NOT NULL AUTO_INCREMENT,
     `point_id`       int(11)                                                 NULL DEFAULT NULL COMMENT '埋点id',
     `view_user_id`   varchar(64) CHARACTER SET utf8 COLLATE utf8_unicode_ci  NULL DEFAULT NULL COMMENT '用户id',
-    `day`            int(11)                                                 NULL DEFAULT NULL COMMENT '时间精确到小时',
+    `day`            int(11)                                                 NULL DEFAULT NULL COMMENT '日期',
+    `platform`       tinyint(1)                                              NULL DEFAULT NULL COMMENT '平台\r\n\r\n1,pc端网页\r\n2,手机端网页\r\n3,ios\r\n4,安卓\r\n5,小程序',
+    `hour`           int(11)                                                 NULL DEFAULT NULL COMMENT '时间',
     `ctime`          int(11)                                                 NULL DEFAULT NULL COMMENT '创建时间',
     `mtime`          int(11)                                                 NULL DEFAULT NULL COMMENT '更新时间',
     `device_name`    varchar(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci NULL DEFAULT NULL COMMENT '设备名称',
     `device_type`    varchar(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci NULL DEFAULT NULL COMMENT ' 设备型号',
     `device_version` varchar(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci NULL DEFAULT NULL COMMENT '版本号',
+    `device_brand`   varchar(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci NULL DEFAULT NULL COMMENT '设备厂商',
     `province`       varchar(50) CHARACTER SET utf8 COLLATE utf8_unicode_ci  NULL DEFAULT NULL COMMENT '省',
     `city`           varchar(50) CHARACTER SET utf8 COLLATE utf8_unicode_ci  NULL DEFAULT NULL COMMENT '市',
     PRIMARY KEY (`id`) USING BTREE

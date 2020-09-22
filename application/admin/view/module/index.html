@@ -1,0 +1,369 @@
+{extend name="layout" /}
+{block name="meta"}
+<!--头信息-->
+<style>
+    .mode-list {
+        padding: 0 10px;
+        display: flex;
+    }
+
+    .mode-item {
+        margin-right: 50px;
+    }
+
+    .mode-item .display {
+        padding: 10px 0;
+        margin-top: 10px;
+
+    }
+
+    .mode-item .display .icon_font {
+        width: 90px !important;
+        padding: 5px;
+        height: 90px !important;
+        font-size: 32px !important;
+        color: #1E9FFF;
+        border: 1px solid #1E9FFF;
+        border-radius: 5px;
+    }
+
+    .icon_font.default {
+        border: 1px solid #dddddd !important;
+        color: #dddddd !important;
+        padding: 5px;
+
+    }
+
+    .icon_font.active {
+        padding: 5px;
+        border: 1px solid #1E9FFF !important;
+        color: #1E9FFF !important;
+    }
+</style>
+{/block}
+{block name="content"}
+<!--内容-->
+<div class="padding">
+    <div class="page-title">
+        数据设置
+    </div>
+    <form class="layui-form" id="add-module">
+        <div class="layui-card">
+            <div class="layui-card-body">
+                <div class="layui-form-item">
+                    <label class="layui-inline" for="name" style="border: 1px #dddddd dashed;width: 100%">
+                        <div class="layui-input-inline" style="width: 100px;">
+                            <select name="" id="">
+                                <option value="1">关键行为</option>
+                            </select>
+                        </div>
+                        <div class="layui-input-inline">
+                            <input id="name" name="name" type="text" placeholder="行为名称（必填）" class="layui-input"
+                                   style="border: none">
+                        </div>
+                    </label>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-inline" for="remark"
+                           style="border: 1px #dddddd dashed;width: 100%;margin-left: 100px">
+                        <div class="layui-input-inline" style="padding-left: 10px">
+                            <input id="remark" name="remark" type="text" placeholder="行为描述（选填）" class="layui-input"
+                                   style="border: none">
+                        </div>
+                    </label>
+                </div>
+            </div>
+        </div>
+        <div class="layui-card">
+            <div class="layui-card-header">
+                <div class="flex" style="justify-content: space-between">
+                    <div class="">数据模块</div>
+                    <div class="layui-btn layui-btn-normal layui-btn-sm" onclick="addMode()">
+                        <i class="layui-icon layui-icon-add-circle"></i>添加数据
+                    </div>
+                </div>
+            </div>
+            <div class="layui-card-body">
+                <div id="mode">
+                    <div class="padding">单事件模块</div>
+                    <div id="mode-one"></div>
+                    <div class="padding">多事件模块</div>
+                    <div id="mode-many"></div>
+                    <div class="padding">漏洞事件模块</div>
+                    <div id="mode-funnel"></div>
+                </div>
+            </div>
+            <div class="layui-card-body">
+                <div class="layui-form-item">
+                    <div class="flex" style="justify-content: flex-end">
+                        <button type="submit" lay-submit="" class="layui-btn layui-btn-normal layui-btn-sm"
+                                lay-filter="addModule">下一步
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </form>
+</div>
+{/block}
+{block name="footer"}
+<!--单事件模板-->
+<script type="text/html" id="template">
+    <div class="mode-list">
+        {{# layui.each(d.data,function(index,item){ }}
+        <div class="mode-item">
+            <div class="checkbox">
+                <input type="checkbox" name="modes" value="{{item.id}}" title="{{item.name}}">
+            </div>
+            <div class="display">
+                {{# layui.each(item.display,function(index,item2){ }}
+                <i class="icon_font">{{d.display[item2].icon}}</i>
+                {{# }) }}
+            </div>
+        </div>
+        {{# }) }}
+    </div>
+</script>
+<script type="text/html" id="add-tpl">
+    <div class="padding">
+        <form class="layui-form">
+            <div class="layui-form-item">
+                <label class="layui-form-label" for="mode-name"><span class="x-red">*</span>模块名称</label>
+                <div class="layui-input-block">
+                    <input type="text" id="mode-name" name="name" class="layui-input" placeholder="请输入">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label" for="mode-remark">模块描述</label>
+                <div class="layui-input-block">
+                    <input type="text" id="mode-remark" name="remark" class="layui-input" placeholder="请输入">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label"><span class="x-red">*</span>模块类型</label>
+                <div class="layui-input-block">
+                    <input type="radio" lay-filter="mode-type" name="type" title="单事件模块" value="1" checked>
+                    <input type="radio" lay-filter="mode-type" name="type" title="多事件模块" value="2">
+                    <input type="radio" lay-filter="mode-type" name="type" title="漏斗模块" value="3">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label" for="name"><span class="x-red">*</span>展示方式</label>
+                <div class="layui-input-block">
+                    <div class="mode-list">
+                        <div class="mode-item">
+                            <div class="display">
+                                {{# layui.each(d.data,function(index,item){ }}
+                                <i data-type="{{item}}" class="icon_font {{d.active[item]?'active':'default'}}">{{d.display[item].icon}}</i>
+                                {{# }) }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </form>
+    </div>
+</script>
+<script type="text/html" id="display-tpl">
+    {{# layui.each(d.data,function(index,item){ }}
+    <i data-type="{{item}}" class="icon_font {{d.active[item]?'active':'default'}}">{{d.display[item].icon}}</i>
+    {{# }) }}
+</script>
+<script>
+    var display = {
+        4: {
+            name: "饼状图",
+            type: 4,
+            icon: "&#xe632;"
+        }, 2: {
+            name: "折线图",
+            type: 2,
+            icon: "&#xe623;"
+        }, 1: {
+            name: "面积图",
+            type: 1,
+            icon: "&#xe624;"
+        }, 6: {
+            name: "漏斗图",
+            type: 6,
+            icon: "&#xe927;"
+        }, 3: {
+            name: "柱状图",
+            type: 3,
+            icon: "&#xe616;"
+        }, 5: {
+            name: "表格",
+            type: 5,
+            icon: "&#xe639;"
+        }
+    }
+    let modes = [
+        {
+            name: "受访次数",
+            type: 1,
+            id: 1,
+            display: [2],
+            status: 1
+        },
+        {
+            name: "受访人数",
+            type: 1,
+            id: 2,
+
+            display: [2],
+            status: 1
+        },
+        {
+            name: "平均受访人数",
+            type: 1,
+            id: 3,
+
+            display: [2],
+            status: 1
+        },
+        {
+            name: "分享次数",
+            type: 2,
+            id: 4,
+
+            display: [1, 2, 4],
+            status: 1
+        },
+        {
+            name: "回点次数",
+            type: 2,
+            id: 5,
+            display: [1, 2, 4],
+            status: 1
+        }, {
+            name: "入口统计",
+            type: 2,
+            id: 6,
+
+            display: [2, 4],
+            status: 1
+        }, {
+            name: "出口统计",
+            type: 2,
+            id: 7,
+
+            display: [2, 4],
+            status: 1
+        }, {
+            name: "关键埋点",
+            type: 2,
+            id: 8,
+
+            display: [2, 4, 5],
+            status: 1
+        }, {
+            name: "转化率",
+            type: 3,
+            id: 9,
+            display: [6, 2, 5],
+            status: 1
+        }];
+    var custom_modes = [];
+    var project_id = '{$project_id}';
+    layui.use(['laytpl', 'form', 'layer', 'jquery'], function () {
+        var laytpl = layui.laytpl, form = layui.form, layer = layui.layer, $ = layui.jquery;
+        /**
+         * 初始化单事件模块
+         */
+
+        let new_mode = {};
+        for (var key in modes) {
+            if (!new_mode.hasOwnProperty(modes[key].type)) {
+                new_mode[modes[key].type] = []
+            }
+            new_mode[modes[key].type].push(modes[key])
+        }
+        let modeOne = laytpl($("#template").html()).render({
+            data: new_mode[1],
+            display: display
+        })
+        let modeMany = laytpl($("#template").html()).render({
+            data: new_mode[2],
+            display: display
+        })
+        let modeFunnel = laytpl($("#template").html()).render({
+            data: new_mode[3],
+            display: display
+        })
+        $("#mode-one").html(modeOne);
+        $("#mode-many").html(modeMany);
+        $("#mode-funnel").html(modeFunnel);
+        form.render()
+        console.log(modeOne);
+        form.on('submit(addModule)', function (e) {
+            var data = $("#add-module").toJSON()
+            console.log(data)
+            return false
+        })
+    })
+
+
+    function addMode() {
+        var active = {};
+        var displayT = {
+            1: [1, 2, 3, 5],
+            2: [1, 2, 3, 4, 5],
+            3: [6, 2, 5],
+        }
+        layui.layer.open({
+            title: "添加模块",
+            content: layui.laytpl($("#add-tpl").html()).render({
+                display: display,
+                data: displayT[1],
+                active: active
+            }),
+            area: ['600px'],
+            type: 1,
+            btn: ['确定', '取消'],
+            btnAlign: "c",
+            success: function (layero, index) {
+                layui.form.render()
+                layui.$(layero).find('.mode-list').on('click', '.icon_font', function () {
+                    if (!active[$(this).data('type')]) {
+                        $(this).removeClass('default').addClass('active')
+                        active[$(this).data('type')] = true;
+                    } else {
+                        $(this).removeClass('active').addClass('default')
+                        active[$(this).data('type')] = false;
+                    }
+                })
+                layui.form.on('radio(mode-type)', function (e) {
+                    if (e.value == 2) {
+                        active[4] = false;
+                    } else if (e.value == 3) {
+                        active[1] = false;
+                        active[3] = false;
+                        active[4] = false;
+                    }
+                    $(layero).find('.display').html(layui.laytpl($("#display-tpl").html()).render({
+                        data: displayT[e.value],
+                        display: display,
+                        active: active
+                    }))
+                })
+            }, yes: function (index, layero) {
+                let data = layui.$(layero).find('form').toJSON();
+                console.log(data)
+                data['project_id'] = project_id;
+                layui.$.post("{:url('modeSave')}", data, function (res) {
+                    if (res.code == 200) {
+                        layui.layer.msg('添加成功')
+                        custom_modes.push(res.data)
+                    } else {
+                        layui.layer.msg(res.msg)
+                    }
+                })
+
+            }
+        })
+    }
+</script>
+<!--脚本-->
+{/block}
